@@ -11,22 +11,20 @@
         <button @click="goCheck(item.sort)">刪除</button>
       </div>
     </div>
-    <div class="bgc" v-if="isShow">
-      <div class="alert_wrap">
-        <div class="content">
-          <p>確定要刪除？</p>
-          <div class="control">
-            <span @click="isShow = !isShow">否</span
-            ><span @click="goDel">是</span>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <!-- 警視窗 -->
+    <alert-window :isShow="isShow" @editShow="editShow">
+      <template v-slot:allowBtn>
+        <span @click="goDel">是</span>
+      </template>
+    </alert-window>
   </div>
 </template>
 
 <script>
-import { requestData } from "network/requestSort.js";
+import requestData from "network/requestSort.js";
+import AlertWindow from "components/alert/AlertWindow.vue";
+
 export default {
   data() {
     return {
@@ -34,6 +32,9 @@ export default {
       isShow: false,
       isDel: "",
     };
+  },
+  components: {
+    AlertWindow,
   },
   created() {
     requestData(null, "sortList", "get")
@@ -48,11 +49,11 @@ export default {
     goAddSort() {
       this.$router.push("/sort");
     },
-    goDel() {
+    goDel(isName) {
       requestData(this.isDel, "sortDel", "delete")
         .then((res) => {
-          console.log(res);
           this.isShow = !this.isShow;
+          alert(`已成功刪除`);
           this.$router.go(0);
         })
         .catch((err) => {
@@ -63,13 +64,14 @@ export default {
       this.isShow = !this.isShow;
       this.isDel = sort;
     },
+    editShow() {
+      this.isShow = !this.isShow;
+    },
   },
 };
 </script>
 
 <style scoped>
-@import url("../../assets/css/alert.css");
-
 #sort_list {
   width: 1200px;
   margin: 0 auto;

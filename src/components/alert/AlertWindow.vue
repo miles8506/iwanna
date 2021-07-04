@@ -1,3 +1,36 @@
+<template>
+  <div>
+    <div class="bgc" v-if="isShow">
+      <div class="alert_wrap">
+        <div class="content">
+          <p>確定要刪除？</p>
+          <div class="control">
+            <span @click="returnShow">否</span>
+            <slot name="allowBtn"></slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    isShow: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  methods: {
+    returnShow() {
+      this.$emit("editShow");
+    },
+  },
+};
+</script>
+
+<style scoped>
 .alert_wrap {
   position: fixed;
   top: 40%;
@@ -53,3 +86,4 @@ p {
   height: 100vh;
   background-color: rgba(223, 223, 223, 0.5);
 }
+</style>

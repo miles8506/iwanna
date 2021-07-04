@@ -2,7 +2,7 @@
   <div id="Home">
     <search-bar />
     <button class="add_goods" @click="goGoodsList">商品列表</button>
-    <button class="add_order" @click="goOrder">新建訂單</button>
+    <button class="add_order" @click="goOrderList">訂單列表</button>
     <button class="add_sort" @click="goSortList">檔期種類列表</button>
   </div>
 </template>
@@ -15,8 +15,8 @@ export default {
     SearchBar,
   },
   methods: {
-    goOrder() {
-      this.$router.push("/order");
+    goOrderList() {
+      this.$router.push("/orderList");
     },
     goGoodsList() {
       this.$router.push("/goodsList");

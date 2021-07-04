@@ -193,21 +193,17 @@
     <button @click="goChange">保存</button>
     <button @click="checkDel">刪除</button>
 
-    <div class="bgc" v-if="isShow">
-      <div class="alert_wrap">
-        <div class="content">
-          <p>確定要刪除？</p>
-          <div class="control">
-            <span @click="isShow = !isShow">否</span
-            ><span @click="goDel">是</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- 警視窗 -->
+    <alert-window :isShow="isShow" @editShow="editShow">
+      <template v-slot:allowBtn>
+        <span @click="goDel">是</span>
+      </template>
+    </alert-window>
   </div>
 </template>
 
 <script>
+import AlertWindow from "components/alert/AlertWindow.vue";
 import { requestData } from "network/request.js";
 export default {
   data() {
@@ -219,6 +215,9 @@ export default {
       goodsData: {},
       isShow: false,
     };
+  },
+  components: {
+    AlertWindow,
   },
   created() {
     this.iid = this.$route.query.iid;
@@ -265,10 +264,12 @@ export default {
         this.$router.go(-1);
       });
     },
+    editShow() {
+      this.isShow = !this.isShow;
+    },
   },
 };
 </script>
 
 <style scoped>
-@import url("../../assets/css/alert.css");
 </style>
