@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { requestData } from "network/requestSort.js";
+import requestData from "network/requestSort.js";
 export default {
   data() {
     return {

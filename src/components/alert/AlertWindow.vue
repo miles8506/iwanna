@@ -3,7 +3,8 @@
     <div class="bgc" v-if="isShow">
       <div class="alert_wrap">
         <div class="content">
-          <p>確定要刪除？</p>
+          <!-- <p>確定要刪除？</p> -->
+          <slot name="alertContent"></slot>
           <div class="control">
             <span @click="returnShow">否</span>
             <slot name="allowBtn"></slot>

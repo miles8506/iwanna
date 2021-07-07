@@ -4,6 +4,14 @@
     <div class="goodsNum">商品貨號:{{ goodsData.selfNum }}</div>
     <div class="goodsName">商品名稱:{{ goodsData.gName }}</div>
     <div class="price">價錢(成本){{ goodsData.pGoods }}</div>
+    <div class="final_price">
+      最後定價<input
+        type="text"
+        v-model.number="finalPrice"
+        disabled
+        ref="finalPriceIpt"
+      /><button @click="editFinalPrice" ref="editBtn">修改</button>
+    </div>
     <div>檔期種類名稱:{{ goodsData.sort }}</div>
     <div class="goodsColor">
       顏色
@@ -195,6 +203,9 @@
 
     <!-- 警視窗 -->
     <alert-window :isShow="isShow" @editShow="editShow">
+      <template v-slot:alertContent>
+        <p>確定要刪除？</p>
+      </template>
       <template v-slot:allowBtn>
         <span @click="goDel">是</span>
       </template>
@@ -214,6 +225,8 @@ export default {
       sortList: [],
       goodsData: {},
       isShow: false,
+      iptDesabled: true,
+      finalPrice: "",
     };
   },
   components: {
@@ -224,6 +237,7 @@ export default {
     requestData(this.$route.query.iid, "goodslistDetail", "get")
       .then((res) => {
         this.goodsData = res;
+        this.finalPrice = res.finalPrice;
         res.isColor.forEach((item) => {
           this.isColor.push(item);
         });
@@ -237,6 +251,8 @@ export default {
   },
   methods: {
     goChange() {
+      if (this.finalPrice == "" && iptDesabled == false)
+        return alert("請確認商品資訊是否填妥");
       const data = {};
       data.gName = this.goodsData.gName;
       data.gNum = this.iid;
@@ -246,6 +262,7 @@ export default {
       data.selfNum = this.goodsData.selfNum;
       data.sort = this.goodsData.sort;
       data.timer = this.goodsData.timer;
+      data.finalPrice = this.finalPrice;
       requestData(JSON.stringify(data), "goodsChange", "post").then((res) => {
         window.alert("商品已修改");
         this.$router.go(-1);
@@ -266,6 +283,16 @@ export default {
     },
     editShow() {
       this.isShow = !this.isShow;
+    },
+    editFinalPrice() {
+      this.iptDesabled = !this.iptDesabled;
+      if (this.iptDesabled == true) {
+        this.$refs.editBtn.textContent = "修改";
+        this.$refs.finalPriceIpt.disabled = this.iptDesabled;
+      } else {
+        this.$refs.editBtn.textContent = "確定";
+        this.$refs.finalPriceIpt.disabled = this.iptDesabled;
+      }
     },
   },
 };

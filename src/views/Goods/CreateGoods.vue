@@ -1,24 +1,46 @@
   <template>
   <div id="Goods">
     <div class="goodsNum">
-      廠商貨號<label for="gNum"
-        ><input type="text" id="gNum" v-model="gNum"
+      <label for="gNum"
+        >廠商貨號<input type="text" id="gNum" v-model="gNum"
       /></label>
     </div>
     <div class="goodsNum">
-      商品貨號<label for="selfNum"
-        ><input type="text" id="selfNum" v-model="selfNum"
-      /></label>
+      <label for="selfNum"
+        >商品貨號<input type="text" id="selfNum" v-model.number="selfNum" />
+      </label>
+      &nbsp
+      <span style="color: red">*只能填寫數字</span>
     </div>
     <div class="goodsName">
-      商品名稱<label for="gName"
-        ><input type="text" id="gName" v-model="gName"
+      <label for="gName"
+        >商品名稱<input type="text" id="gName" v-model="gName"
       /></label>
     </div>
     <div class="price">
-      價錢(成本)<label for="pGoods"
-        ><input type="text" id="pGoods" v-model="pGoods"
-      /></label>
+      <template>
+        <label for="pGoods"
+          >價錢(成本)<input
+            type="text"
+            id="pGoods"
+            v-model.trim="pGoods"
+            ref="nativePriceIpt" /></label
+        ><button @click="checkNativePrice" v-if="isShowNativePriceBtn">
+          確定
+        </button>
+      </template>
+    </div>
+    <div class="sugPrice" v-if="isShowComputedPrice">
+      <div>最低售價：{{ minimumPrice }}</div>
+      <div>建議售價：{{ bestPrice }}</div>
+      <div>
+        <label for="final_price"
+          >最後定價：<input
+            type="text"
+            id="final_price"
+            v-model.number="finalPrice"
+        /></label>
+      </div>
     </div>
     <div>
       檔期種類名稱<select name="sort" id="" v-model="sort">
@@ -216,11 +238,20 @@
     </div>
     <button @click="goBack">取消</button>
     <button @click="goSave">保存</button>
+    <alert-window :isShow="isShowAlert" @editShow="editShow">
+      <template v-slot:alertContent>
+        <p>是否確定？確定後就不能再更改</p>
+      </template>
+      <template v-slot:allowBtn>
+        <span @click="nativePriceCheck">是</span>
+      </template>
+    </alert-window>
   </div>
 </template>
 
 <script>
 import { requestData } from "network/request.js";
+import AlertWindow from "components/alert/AlertWindow.vue";
 export default {
   data() {
     return {
@@ -228,11 +259,18 @@ export default {
       selfNum: "",
       gName: "",
       pGoods: "",
+      finalPrice: "",
+      isShowNativePriceBtn: true,
+      isShowAlert: false,
+      isShowComputedPrice: false,
       isColor: [],
       isSize: [],
       sort: "",
       sortList: [],
     };
+  },
+  components: {
+    AlertWindow,
   },
   created() {
     requestData(null, "sortList", "get").then((res) => {
@@ -252,7 +290,8 @@ export default {
         this.pGoods != "" &&
         this.sort != "" &&
         this.isColor.length > 0 &&
-        this.isSize.length > 0
+        this.isSize.length > 0 &&
+        this.finalPrice !== ""
       ) {
         const goodsInfo = {};
         goodsInfo.gNum = this.gNum;
@@ -262,7 +301,9 @@ export default {
         goodsInfo.isColor = this.isColor;
         goodsInfo.isSize = this.isSize;
         goodsInfo.sort = this.sort.sort;
-        goodsInfo.timer = new Date();
+        goodsInfo.finalPrice = this.finalPrice;
+
+        // goodsInfo.timer = new Date();
         requestData(JSON.stringify(goodsInfo), "addGoods", "post").then(
           (res) => {
             if (res == 0) {
@@ -277,8 +318,29 @@ export default {
           }
         );
       } else {
-        alert('請確認商品輸入完整')
+        alert("請確認商品輸入完整");
       }
+    },
+    checkNativePrice() {
+      if (this.pGoods == "") return alert("請確認資料填妥");
+      this.isShowAlert = !this.isShowAlert;
+    },
+    editShow() {
+      this.isShowAlert = !this.isShowAlert;
+    },
+    nativePriceCheck() {
+      this.isShowNativePriceBtn = !this.isShowNativePriceBtn;
+      this.isShowAlert = !this.isShowAlert;
+      this.$refs.nativePriceIpt.disabled = true;
+      this.isShowComputedPrice = !this.isShowComputedPrice;
+    },
+  },
+  computed: {
+    minimumPrice() {
+      return Math.ceil((parseInt(this.pGoods) + 5) * 4.35 * 2);
+    },
+    bestPrice() {
+      return Math.ceil((parseInt(this.pGoods) + 5) * 4.35 * 2 * 1.15);
     },
   },
 };

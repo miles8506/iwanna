@@ -14,6 +14,9 @@
 
     <!-- 警視窗 -->
     <alert-window :isShow="isShow" @editShow="editShow">
+      <template v-slot:alertContent>
+        <p>確定要刪除？</p>
+      </template>
       <template v-slot:allowBtn>
         <span @click="goDel">是</span>
       </template>
