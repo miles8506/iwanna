@@ -20,7 +20,7 @@
     <div class="price">
       <template>
         <label for="pGoods"
-          >價錢(成本)<input
+          >成本價(人民幣)<input
             type="text"
             id="pGoods"
             v-model.trim="pGoods"
@@ -31,6 +31,7 @@
       </template>
     </div>
     <div class="sugPrice" v-if="isShowComputedPrice">
+      <div>成本價(台幣){{ nativeNT }}</div>
       <div>最低售價：{{ minimumPrice }}</div>
       <div>建議售價：{{ bestPrice }}</div>
       <div>
@@ -252,7 +253,9 @@
 <script>
 import { requestData } from "network/request.js";
 import AlertWindow from "components/alert/AlertWindow.vue";
+import priceMixin from "@/mixin/price.js";
 export default {
+  mixins: [priceMixin],
   data() {
     return {
       gNum: "",
@@ -335,14 +338,17 @@ export default {
       this.isShowComputedPrice = !this.isShowComputedPrice;
     },
   },
-  computed: {
-    minimumPrice() {
-      return Math.ceil((parseInt(this.pGoods) + 5) * 4.35 * 2);
-    },
-    bestPrice() {
-      return Math.ceil((parseInt(this.pGoods) + 5) * 4.35 * 2 * 1.15);
-    },
-  },
+  // computed: {
+  //   nativeNT() {
+  //     return Math.ceil((parseInt(this.pGoods) + 5) * 4.35);
+  //   },
+  //   minimumPrice() {
+  //     return Math.ceil((parseInt(this.pGoods) + 5) * 4.35 * 2);
+  //   },
+  //   bestPrice() {
+  //     return Math.ceil((parseInt(this.pGoods) + 5) * 4.35 * 2 * 1.15);
+  //   },
+  // },
 };
 </script>
 

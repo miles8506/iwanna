@@ -3,13 +3,23 @@
     <div class="goodsNum">廠商貨號:{{ goodsData.gNum }}</div>
     <div class="goodsNum">商品貨號:{{ goodsData.selfNum }}</div>
     <div class="goodsName">商品名稱:{{ goodsData.gName }}</div>
-    <div class="price">價錢(成本){{ goodsData.pGoods }}</div>
+    <div class="price">
+      成本價(人民幣):<input
+        type="text"
+        v-model="pGoods"
+        disabled
+        ref="nativePriceIpt"
+      /><button @click="pGoodsCheck" ref="nativePriceBtn">修改</button>
+    </div>
+    <div>成本價(台幣):{{ nativeNT }}</div>
+    <div>最低售價:{{ minimumPrice }}</div>
+    <div>建議售價:{{ bestPrice }}</div>
     <div class="final_price">
       最後定價<input
         type="text"
         v-model.number="finalPrice"
-        disabled
         ref="finalPriceIpt"
+        disabled
       /><button @click="editFinalPrice" ref="editBtn">修改</button>
     </div>
     <div>檔期種類名稱:{{ goodsData.sort }}</div>
@@ -200,6 +210,7 @@
     <button @click="goBack">取消</button>
     <button @click="goChange">保存</button>
     <button @click="checkDel">刪除</button>
+    {{ isShowNativePrice }}
 
     <!-- 警視窗 -->
     <alert-window :isShow="isShow" @editShow="editShow">
@@ -216,10 +227,14 @@
 <script>
 import AlertWindow from "components/alert/AlertWindow.vue";
 import { requestData } from "network/request.js";
+import priceMixin from "@/mixin/price.js";
+
 export default {
+  mixins: [priceMixin],
   data() {
     return {
       iid: "",
+      pGoods: "",
       isColor: [],
       isSize: [],
       sortList: [],
@@ -227,6 +242,7 @@ export default {
       isShow: false,
       iptDesabled: true,
       finalPrice: "",
+      isShowNativePrice: true,
     };
   },
   components: {
@@ -238,6 +254,7 @@ export default {
       .then((res) => {
         this.goodsData = res;
         this.finalPrice = res.finalPrice;
+        this.pGoods = res.pGoods;
         res.isColor.forEach((item) => {
           this.isColor.push(item);
         });
@@ -251,14 +268,21 @@ export default {
   },
   methods: {
     goChange() {
-      if (this.finalPrice == "" && iptDesabled == false)
+      if (
+        this.finalPrice == "" ||
+        this.iptDesabled == false ||
+        this.isShowNativePrice === false ||
+        this.pGoods == "" ||
+        this.finalPrice == ""
+      ) {
         return alert("請確認商品資訊是否填妥");
+      }
       const data = {};
       data.gName = this.goodsData.gName;
       data.gNum = this.iid;
       data.isColor = this.isColor;
       data.isSize = this.isSize;
-      data.pGoods = this.goodsData.pGoods;
+      data.pGoods = this.pGoods;
       data.selfNum = this.goodsData.selfNum;
       data.sort = this.goodsData.sort;
       data.timer = this.goodsData.timer;
@@ -292,6 +316,16 @@ export default {
       } else {
         this.$refs.editBtn.textContent = "確定";
         this.$refs.finalPriceIpt.disabled = this.iptDesabled;
+      }
+    },
+    pGoodsCheck() {
+      this.isShowNativePrice = !this.isShowNativePrice;
+      if (!this.isShowNativePrice) {
+        this.$refs.nativePriceIpt.disabled = false;
+        this.$refs.nativePriceBtn.textContent = "確定";
+      } else {
+        this.$refs.nativePriceIpt.disabled = true;
+        this.$refs.nativePriceBtn.textContent = "修改";
       }
     },
   },

@@ -160,7 +160,7 @@
     <h2 class="computedCountPrice">訂單總金額：{{ countPrice }}</h2>
 
     <!-- 提交訂單 -->
-    <button>提交訂單</button>
+    <button @click="submitOrder">提交訂單</button>
 
     <alert-window>
       <template v-slot:alertContent>
@@ -174,7 +174,7 @@
 </template>
 
 <script>
-import { requestAll } from "network/request.js";
+import { requestAll, requestData } from "network/request.js";
 import AlertWindow from "components/alert/AlertWindow.vue";
 import dayjs from "dayjs";
 
@@ -226,6 +226,9 @@ export default {
       lastShipment: "",
       // 最晚出貨日期isShow
       lastShipIsShow: true,
+
+      //商品總金額
+      // goodsListTotal: 0,
     };
   },
   components: {
@@ -294,6 +297,7 @@ export default {
         order.orderNote = this.orderNote;
         order.orderSelfNum = this.resGoods.selfNum;
         order.orderSelfNum = this.resGoods.gNum;
+        order.status = false;
         order.finalPrice = res.finalPrice * this.orderCount;
         this.saveOrder.orderList.push(order);
         //init
@@ -346,6 +350,22 @@ export default {
       const timer = dayjs(this.lastShipment).valueOf();
       this.lastShipIsShow = !this.lastShipIsShow;
       this.saveOrder.lastShipment = timer;
+    },
+    submitOrder() {
+      if (this.saveOrder.orderList.length < 1)
+        return alert("請添加商品訂單後再提交訂單");
+      this.saveOrder.orderNum = this.orderNum;
+      this.saveOrder.orderTotal = this.countPrice;
+      console.log(this.saveOrder);
+      const data = JSON.stringify(this.saveOrder);
+      requestData(data, "addOrder", "post")
+        .then((res) => {
+          if (res == 0) alert("訂單添加成功");
+          this.$router.push("/orderList");
+        })
+        .catch((err) => {
+          console.log(`err${err}`);
+        });
     },
   },
   computed: {
