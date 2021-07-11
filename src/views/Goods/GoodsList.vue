@@ -2,8 +2,6 @@
   <div id="GoodsList">
     <button @click="goGoods">新增商品</button>
     檔期種類選擇：<select
-      name=""
-      id=""
       v-model="sortClass"
       @change="changeSort"
     >

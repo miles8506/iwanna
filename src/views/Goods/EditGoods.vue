@@ -25,6 +25,15 @@
     <div>檔期種類名稱:{{ goodsData.sort }}</div>
     <div class="goodsColor">
       顏色
+      <label for="F"
+        ><input
+          type="checkbox"
+          checked
+          id="F"
+          value="F"
+          v-model="isColor"
+        />F</label
+      >
       <label for="black"
         ><input
           type="checkbox"
@@ -210,7 +219,6 @@
     <button @click="goBack">取消</button>
     <button @click="goChange">保存</button>
     <button @click="checkDel">刪除</button>
-    {{ isShowNativePrice }}
 
     <!-- 警視窗 -->
     <alert-window :isShow="isShow" @editShow="editShow">

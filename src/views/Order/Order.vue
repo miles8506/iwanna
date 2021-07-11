@@ -6,10 +6,20 @@
         <!-- 訂單編號 -->
         <div>訂單編號：{{ orderNum }}</div>
 
+        <!-- 蝦皮訂單編號 -->
+        <div>
+          蝦皮訂單編號：<input
+            type="text"
+            v-model.trim="shopeeAccount"
+            ref="shopeeIpt"
+          />
+          <button @click="shopeeCheck" v-if="isShopeeShow">確定</button>
+        </div>
+
         <!-- 買家帳號 -->
         <template v-if="buyerIsShow">
           <div>
-            買家帳號<input type="text" v-model.trim="buyerAccount" />
+            買家帳號：<input type="text" v-model.trim="buyerAccount" />
             <button @click="checkBuyerAccount">確定</button>
           </div>
         </template>
@@ -201,6 +211,9 @@ export default {
       // -- 訂單資訊(單筆) --
       //訂單編號
       orderNum: "",
+      //蝦皮訂單編號
+      shopeeAccount: "",
+      isShopeeShow: true,
       //訂單商品名稱
       orderName: "",
       // 訂單顏色
@@ -284,7 +297,8 @@ export default {
         this.sortBind !== "" &&
         this.goodsListBind !== "" &&
         this.buyerIsShow === false &&
-        this.lastShipIsShow === false
+        this.lastShipIsShow === false &&
+        this.isShopeeShow === false
       ) {
         const res = this.goodsList.find(
           (item) => item.gNum == this.resGoods.gNum
@@ -296,7 +310,7 @@ export default {
         order.orderCount = this.orderCount;
         order.orderNote = this.orderNote;
         order.orderSelfNum = this.resGoods.selfNum;
-        order.orderSelfNum = this.resGoods.gNum;
+        order.ordergNum = this.resGoods.gNum;
         order.status = false;
         order.finalPrice = res.finalPrice * this.orderCount;
         this.saveOrder.orderList.push(order);
@@ -324,9 +338,7 @@ export default {
           item.orderSize == data.orderSize
         );
       });
-
       this.saveOrder.orderList.splice(index, 1);
-      console.log(this.saveOrder.orderList);
     },
     searchGoods() {
       const iid = this.goodsNum;
@@ -356,7 +368,7 @@ export default {
         return alert("請添加商品訂單後再提交訂單");
       this.saveOrder.orderNum = this.orderNum;
       this.saveOrder.orderTotal = this.countPrice;
-      console.log(this.saveOrder);
+      this.saveOrder.orderCurryStatus = false;
       const data = JSON.stringify(this.saveOrder);
       requestData(data, "addOrder", "post")
         .then((res) => {
@@ -366,6 +378,12 @@ export default {
         .catch((err) => {
           console.log(`err${err}`);
         });
+    },
+    shopeeCheck() {
+      if (this.shopeeAccount == "") return alert("請確認蝦皮訂單編號是否填妥");
+      this.isShopeeShow = !this.isShopeeShow;
+      this.$refs.shopeeIpt.disabled = true;
+      this.saveOrder.shopeeAccount = this.shopeeAccount;
     },
   },
   computed: {

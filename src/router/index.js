@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 const Home = () => import('views/Home/Home.vue');
 const Order = () => import('views/Order/Order.vue');
 const OrderList = () => import('views/Order/OrderList.vue');
+const EditOrder = () => import('views/Order/OrderEdit.vue');
 const GoodsList = () => import('views/Goods/GoodsList.vue');
 const CreateGoods = () => import('views/Goods/CreateGoods.vue');
 const SortList = () => import('views/Sort/SortList.vue');
@@ -34,6 +35,10 @@ const routes = [
   {
     path: '/orderList',
     component: OrderList
+  },
+  {
+    path: '/editOrder/:iid',
+    component: EditOrder
   },
   {
     path: '/goodsList',

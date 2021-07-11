@@ -57,6 +57,9 @@
     </div>
     <div class="goodsColor">
       顏色
+      <label for="F"
+        ><input type="checkbox" id="F" value="F" v-model="isColor" />F</label
+      >
       <label for="black"
         ><input
           type="checkbox"
