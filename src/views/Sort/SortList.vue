@@ -57,7 +57,7 @@ export default {
         .then((res) => {
           this.isShow = !this.isShow;
           alert(`已成功刪除`);
-          this.$router.push("/sortList");
+          this.$router.push("/");
         })
         .catch((err) => {
           console.log(err);
