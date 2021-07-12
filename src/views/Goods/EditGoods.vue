@@ -198,6 +198,10 @@
     </div>
     <div class="size">
       尺寸
+      <label for="free"
+        ><input type="checkbox" id="free" value="Free" v-model="isSize" />Free
+        Size</label
+      >
       <label for="s"
         ><input type="checkbox" value="S" id="s" v-model="isSize" />S</label
       >
@@ -209,10 +213,6 @@
       >
       <label for="xl"
         ><input type="checkbox" value="XL" id="xl" v-model="isSize" />XL</label
-      >
-      <label for="free"
-        ><input type="checkbox" id="free" value="Free" v-model="isSize" />Free
-        Size</label
       >
     </div>
     <div>創建時間：{{ goodsData.timer }}</div>
