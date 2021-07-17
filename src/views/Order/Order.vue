@@ -313,6 +313,7 @@ export default {
         order.ordergNum = this.resGoods.gNum;
         order.status = false;
         order.finalPrice = res.finalPrice * this.orderCount;
+        order.pGoods = res.pGoods;
         this.saveOrder.orderList.push(order);
         //init
         this.sortBind = "";
@@ -369,6 +370,8 @@ export default {
       this.saveOrder.orderNum = this.orderNum;
       this.saveOrder.orderTotal = this.countPrice;
       this.saveOrder.orderCurryStatus = false;
+      // 叫貨狀態 placeOrder
+      this.saveOrder.placeOrder = false;
       const data = JSON.stringify(this.saveOrder);
       requestData(data, "addOrder", "post")
         .then((res) => {

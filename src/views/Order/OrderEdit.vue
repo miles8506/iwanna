@@ -6,6 +6,12 @@
       <div>買家帳號:{{ orderGoods.buyerAccount }}</div>
       <div>最晚出貨時間:{{ lastShip }}</div>
       <div>訂單總金額:{{ orderGoods.orderTotal }}</div>
+      <div>
+        叫貨狀態:{{ orderGoods.placeOrder ? "已叫貨" : "未叫貨" }}
+        <button v-if="!orderGoods.placeOrder" @click="placeOrderBtn">
+          確認已叫貨
+        </button>
+      </div>
     </div>
     <div class="detail_order">
       <h2>訂單商品</h2>
@@ -20,7 +26,9 @@
               type="checkbox"
               @change="statusChange(item)"
               :checked="item.status"
-              :disabled="item.status === 'complete'"
+              :disabled="
+                item.status === 'complete' || orderGoods.placeOrder === false
+              "
               id="curryStatusIpt"
           /></label>
         </div>
@@ -45,11 +53,21 @@
     </div>
     <button @click="goBack">返回</button>
     <button @click="goEdit">確定</button>
+    <alert-window :isShow="isShowAlert" @editShow="editShow">
+      <template v-slot:alertContent>
+        <p>是否更改為已叫貨？確定後就不能再更改</p>
+      </template>
+      <template v-slot:allowBtn>
+        <span @click="placeOrderCheck">是</span>
+      </template>
+    </alert-window>
   </div>
 </template>
 
 <script>
 import { requestData } from "network/request.js";
+import AlertWindow from "components/alert/AlertWindow.vue";
+
 import dayjs from "dayjs";
 export default {
   data() {
@@ -57,7 +75,11 @@ export default {
       orderGoods: {},
       isEdit: [],
       noteArr: [],
+      isShowAlert: false,
     };
+  },
+  components: {
+    AlertWindow,
   },
   created() {
     this.orderGoods = JSON.parse(this.$route.query.item);
@@ -124,6 +146,16 @@ export default {
             });
         }
       }
+    },
+    editShow() {
+      this.isShowAlert = !this.isShowAlert;
+    },
+    placeOrderBtn() {
+      this.isShowAlert = !this.isShowAlert;
+    },
+    placeOrderCheck() {
+      this.orderGoods.placeOrder = true;
+      this.isShowAlert = !this.isShowAlert;
     },
   },
   computed: {

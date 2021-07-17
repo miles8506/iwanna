@@ -11,6 +11,13 @@
       </select>
     </div>
     <div>
+      叫貨狀態：<select v-model="placeOrderStatus" @change="placeOrderChange">
+        <option value="">全部</option>
+        <option value="orderPlaceTrue">已叫貨</option>
+        <option value="orderPlaceFalse">未叫貨</option>
+      </select>
+    </div>
+    <div>
       最晚出貨日期：
       <select name="" v-model="curryTimer" @change="curryTimerChange">
         <option value="">全部</option>
@@ -18,16 +25,18 @@
         <option value="last">晚>早</option>
       </select>
     </div>
-    <div>
+    <div class="shopeeAndPlaceOrderWrap">
       蝦皮/IG訂單帳號查詢<input
         type="text"
         v-model.trim="shopeeAccout"
       /><button @click="shopeeAccountSearch">查詢</button>
+      <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
     </div>
     <div class="order_hd">
       <div>蝦皮/IG訂單編號</div>
       <div>買家帳號</div>
       <div>訂單總金額</div>
+      <div>叫貨狀態</div>
       <div>到貨狀態</div>
       <div>最晚出貨日期</div>
       <div>操作</div>
@@ -43,6 +52,9 @@
           <div class="orderNum">{{ item.shopeeAccount }}</div>
           <div class="buyerAccount">{{ item.buyerAccount }}</div>
           <div class="orderTotal">{{ item.orderTotal }}</div>
+          <div class="placeOrder">
+            {{ item.placeOrder ? "已叫貨" : "未叫貨" }}
+          </div>
           <div class="orderList_stauts">{{ shipStatus(item) }}</div>
           <div class="lastDate">{{ lastShipDate(item.lastShipment) }}</div>
           <div><button @click="goEditOrder(item)">編輯</button></div>
@@ -86,6 +98,9 @@ export default {
       isShow: false,
       shippedItem: {},
       isIndex: null,
+
+      // 出貨狀態v-model
+      placeOrderStatus: "",
     };
   },
   components: {
@@ -235,6 +250,22 @@ export default {
           console.log(`err${err}`);
         });
     },
+    placeOrderChange() {
+      requestData(null, "orderList", "get").then((res) => {
+        if (this.placeOrderStatus === "") {
+          this.goodsListData = res;
+        } else if (this.placeOrderStatus === "orderPlaceTrue") {
+          const filterArr = res.filter((item) => item.placeOrder === true);
+          this.goodsListData = filterArr;
+        } else if (this.placeOrderStatus === "orderPlaceFalse") {
+          const filterArr = res.filter((item) => item.placeOrder === false);
+          this.goodsListData = filterArr;
+        }
+      });
+    },
+    goPlaceOrderBtn() {
+      this.$router.push("/orderplace");
+    },
   },
 };
 </script>
@@ -250,7 +281,7 @@ export default {
   border-bottom: 2px solid #999999;
 }
 .order_hd > div {
-  flex: 16.6%;
+  flex: 12.5%;
   text-align: center;
   font-weight: 700;
   height: 50px;
@@ -262,7 +293,11 @@ export default {
 }
 
 .goods_item > div {
-  flex: 16.6%;
+  flex: 12.5%;
   text-align: center;
+}
+
+.placeOrderBtn {
+  float: right;
 }
 </style>
