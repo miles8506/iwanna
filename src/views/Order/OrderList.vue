@@ -221,6 +221,7 @@ export default {
         });
     },
     shippedBtnClick(item, index) {
+      if (!item.placeOrder) return alert("請先確認叫貨狀態為已叫貨");
       this.isShow = !this.isShow;
       this.shippedItem = item;
       this.isIndex = index;
