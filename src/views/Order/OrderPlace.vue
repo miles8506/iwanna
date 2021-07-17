@@ -21,7 +21,7 @@
           <span>{{ item.orderColor }}</span>
           <span>{{ item.orderSize }}</span>
           <span>{{ item.pGoods }}</span>
-          <span>{{ nativePrice(item.pGoods, item.orderCount) }}</span>
+          <span>{{ nativePriceNT(item.pGoods, item.orderCount) }}</span>
         </div>
         <h2>台幣總金額:{{ NTtotal }}</h2>
         <h2>人民幣總金額:{{ CNYtotal }}</h2>
@@ -40,7 +40,6 @@ export default {
   data() {
     return {
       orderPlaceList: [],
-      nativePriceArrTotal: [],
     };
   },
   created() {
@@ -91,10 +90,13 @@ export default {
     });
   },
   methods: {
-    nativePrice(n_price, count) {
+    nativePriceNT(n_price, count) {
       const res = Math.ceil((parseInt(n_price) + 5) * 4.35);
       return res * count;
     },
+    // nativePriceCNY(n_price, count) {
+    //   return n_price
+    // }
   },
   computed: {
     NTtotal() {
@@ -112,7 +114,8 @@ export default {
       if (this.orderPlaceList) {
         let totalPrice = 0;
         this.orderPlaceList.forEach((item) => {
-          totalPrice += parseInt(item.pGoods);
+          const CNY = Math.ceil(parseInt(item.pGoods)) * item.orderCount;
+          totalPrice += CNY;
         });
         return totalPrice;
       }
