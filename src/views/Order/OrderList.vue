@@ -233,7 +233,6 @@ export default {
       const findObj = this.goodsListData.find(
         (item) => item === this.shippedItem
       );
-      console.log(this.shippedItem);
       findObj.orderList.forEach((item) => {
         item.status = "complete";
       });
@@ -243,7 +242,7 @@ export default {
         .then((res) => {
           if (res == 0) {
             alert("訂單已修改成功");
-            this.$router.go(0);
+            this.$router.push("/orderList");
           }
         })
         .catch((err) => {

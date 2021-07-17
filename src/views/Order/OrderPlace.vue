@@ -9,6 +9,7 @@
       <div>商品顏色</div>
       <div>商品尺寸</div>
       <div>商品成本</div>
+      <div>換算台幣</div>
     </div>
     <div class="orderPlace_bd">
       <template v-if="orderPlaceList.length > 0">
@@ -19,9 +20,11 @@
           <span>{{ item.orderCount }}</span>
           <span>{{ item.orderColor }}</span>
           <span>{{ item.orderSize }}</span>
+          <span>{{ item.pGoods }}</span>
           <span>{{ nativePrice(item.pGoods, item.orderCount) }}</span>
         </div>
-        <h2>總成本:{{ total }}</h2>
+        <h2>台幣總金額:{{ NTtotal }}</h2>
+        <h2>人民幣總金額:{{ CNYtotal }}</h2>
       </template>
       <template v-else>
         <h2>待叫貨清單列表為空</h2>
@@ -94,15 +97,24 @@ export default {
     },
   },
   computed: {
-    total() {
+    NTtotal() {
       if (this.orderPlaceList) {
-        let totalPirce = 0;
+        let totalPrice = 0;
         this.orderPlaceList.forEach((item) => {
           const NT =
             Math.ceil((parseInt(item.pGoods) + 5) * 4.35) * item.orderCount;
-          totalPirce += NT;
+          totalPrice += NT;
         });
-        return totalPirce;
+        return totalPrice;
+      }
+    },
+    CNYtotal() {
+      if (this.orderPlaceList) {
+        let totalPrice = 0;
+        this.orderPlaceList.forEach((item) => {
+          totalPrice += parseInt(item.pGoods);
+        });
+        return totalPrice;
       }
     },
   },
