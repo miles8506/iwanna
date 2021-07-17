@@ -11,18 +11,21 @@
       <div>商品成本</div>
     </div>
     <div class="orderPlace_bd">
-      <div v-for="(item, index) in orderPlaceList" :key="index">
-        <span>{{ item.ordergNum }}</span>
-        <span>{{ item.orderSelfNum }}</span>
-        <span>{{ item.orderName }}</span>
-        <span>{{ item.orderCount }}</span>
-        <span>{{ item.orderColor }}</span>
-        <span>{{ item.orderSize }}</span>
-        <span>{{ nativePrice(item.pGoods, item.orderCount) }}</span>
-      </div>
-    </div>
-    <div class="total_wrap">
-      <h2>總成本:{{ total }}</h2>
+      <template v-if="orderPlaceList.length > 0">
+        <div v-for="(item, index) in orderPlaceList" :key="index">
+          <span>{{ item.ordergNum }}</span>
+          <span>{{ item.orderSelfNum }}</span>
+          <span>{{ item.orderName }}</span>
+          <span>{{ item.orderCount }}</span>
+          <span>{{ item.orderColor }}</span>
+          <span>{{ item.orderSize }}</span>
+          <span>{{ nativePrice(item.pGoods, item.orderCount) }}</span>
+        </div>
+        <h2>總成本:{{ total }}</h2>
+      </template>
+      <template v-else>
+        <h2>待叫貨清單列表為空</h2>
+      </template>
     </div>
   </div>
 </template>
@@ -137,7 +140,5 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-}
-.total_wrap {
 }
 </style>
