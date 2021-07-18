@@ -13,7 +13,11 @@
     </div>
     <div class="orderPlace_bd">
       <template v-if="orderPlaceList.length > 0">
-        <div v-for="(item, index) in orderPlaceList" :key="index">
+        <div
+          v-for="(item, index) in orderPlaceList"
+          :key="index"
+          class="orderPlaceItem"
+        >
           <span>{{ item.ordergNum }}</span>
           <span>{{ item.orderSelfNum }}</span>
           <span>{{ item.orderName }}</span>
@@ -23,8 +27,10 @@
           <span>{{ item.pGoods }}</span>
           <span>{{ nativePriceNT(item.pGoods, item.orderCount) }}</span>
         </div>
-        <h2>台幣總金額:{{ NTtotal }}</h2>
-        <h2>人民幣總金額:{{ CNYtotal }}</h2>
+        <div class="totalWrap">
+          <h2>台幣總金額:{{ NTtotal }}</h2>
+          <h2>人民幣總金額:{{ CNYtotal }}</h2>
+        </div>
       </template>
       <template v-else>
         <h2>待叫貨清單列表為空</h2>
@@ -54,12 +60,12 @@ export default {
       GoodList.forEach((goodListItem) => {
         const result = this.orderPlaceList.find((item) => {
           return (
-            item.orderNum == goodListItem.orderNum &&
+            item.ordergNum == goodListItem.ordergNum &&
             item.orderColor == goodListItem.orderColor &&
             item.orderSize == goodListItem.orderSize
           );
         });
-        if (!result) {
+        if (result == undefined) {
           this.orderPlaceList.push(goodListItem);
         } else {
           result.orderCount += goodListItem.orderCount;
@@ -134,6 +140,11 @@ export default {
 }
 .orderPlace_hd {
   display: flex;
+  border-bottom: 2px solid #999999;
+  height: 50px;
+}
+.orderPlace_hd > div {
+  line-height: 50px;
 }
 .orderPlace_hd > div {
   flex: 16.6%;
@@ -155,5 +166,16 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+}
+
+.orderPlaceItem {
+  border-bottom: 1px solid #999999;
+}
+.totalWrap {
+  display: block !important;
+  margin-top: 30px;
+}
+.totalWrap h2:nth-child(1) {
+  margin-bottom: 10px;
 }
 </style>

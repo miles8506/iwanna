@@ -33,6 +33,7 @@
       <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
     </div>
     <div class="order_hd">
+      <div>序列</div>
       <div>蝦皮/IG訂單編號</div>
       <div>買家帳號</div>
       <div>訂單總金額</div>
@@ -49,6 +50,7 @@
           v-for="(item, index) in goodsListData"
           :key="index"
         >
+          <div>{{ index + 1 }}</div>
           <div class="orderNum">{{ item.shopeeAccount }}</div>
           <div class="buyerAccount">{{ item.buyerAccount }}</div>
           <div class="orderTotal">{{ item.orderTotal }}</div>
@@ -281,7 +283,7 @@ export default {
   border-bottom: 2px solid #999999;
 }
 .order_hd > div {
-  flex: 12.5%;
+  flex: 11.1%;
   text-align: center;
   font-weight: 700;
   height: 50px;
@@ -293,11 +295,20 @@ export default {
 }
 
 .goods_item > div {
-  flex: 12.5%;
+  flex: 11.1%;
   text-align: center;
 }
 
 .placeOrderBtn {
   float: right;
+}
+
+.goods_item {
+  border-bottom: 1px solid #999999;
+  height: 50px;
+}
+
+.goods_item > div {
+  line-height: 49px;
 }
 </style>
