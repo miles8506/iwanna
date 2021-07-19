@@ -33,15 +33,15 @@
       <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
     </div>
     <div class="order_hd">
-      <div>序列</div>
-      <div>蝦皮/IG訂單編號</div>
+      <div class="listItem_title">序列</div>
+      <div class="orderNum_title">蝦皮/IG訂單編號</div>
       <div>買家帳號</div>
       <div>訂單總金額</div>
       <div>叫貨狀態</div>
       <div>到貨狀態</div>
       <div>最晚出貨日期</div>
-      <div>操作</div>
       <div>已出貨</div>
+      <div>操作</div>
     </div>
     <div v-if="goodsListData.length > 0">
       <div class="order_bd">
@@ -50,23 +50,31 @@
           v-for="(item, index) in goodsListData"
           :key="index"
         >
-          <div>{{ index + 1 }}</div>
-          <div class="orderNum">{{ item.shopeeAccount }}</div>
-          <div class="buyerAccount">{{ item.buyerAccount }}</div>
-          <div class="orderTotal">{{ item.orderTotal }}</div>
-          <div class="placeOrder">
+          <div class="content_item list_item">{{ index + 1 }}</div>
+          <div class="orderNum content_item">{{ item.shopeeAccount }}</div>
+          <div class="buyerAccount content_item">{{ item.buyerAccount }}</div>
+          <div class="orderTotal content_item">{{ item.orderTotal }}</div>
+          <div class="placeOrder content_item">
             {{ item.placeOrder ? "已叫貨" : "未叫貨" }}
           </div>
-          <div class="orderList_stauts">{{ shipStatus(item) }}</div>
-          <div class="lastDate">{{ lastShipDate(item.lastShipment) }}</div>
-          <div><button @click="goEditOrder(item)">編輯</button></div>
-          <div>
+          <div class="orderList_stauts content_item">
+            {{ shipStatus(item) }}
+          </div>
+          <div class="lastDate content_item">
+            {{ lastShipDate(item.lastShipment) }}
+          </div>
+          <div class="content_item">
             <button
               @click="shippedBtnClick(item, index)"
               :disabled="item.orderCurryStatus === 'complete'"
             >
               已出貨
             </button>
+          </div>
+
+          <div class="content_item">
+            <button @click="goEditOrder(item)" class="edit_btn">編輯</button>
+            <button @click="goRemoveOrder(item.orderNum)">刪除</button>
           </div>
         </div>
       </div>
@@ -87,6 +95,7 @@
 </template>
 
 <script>
+import deleteData from "network/requestSort.js";
 import { requestData } from "network/request.js";
 import AlertWindow from "components/alert/AlertWindow.vue";
 import dayjs from "dayjs";
@@ -100,7 +109,7 @@ export default {
       isShow: false,
       shippedItem: {},
       isIndex: null,
-
+      deleteId: "",
       // 出貨狀態v-model
       placeOrderStatus: "",
     };
@@ -122,26 +131,6 @@ export default {
       this.$router.push("/order");
     },
     shipStatus(data) {
-      // const status = data.orderList.some((item) => {
-      //   return item.status === false;
-      // });
-      // if (status) {
-      //   data.orderCurryStatus = false;
-      //   return "未到貨";
-      // } else {
-      //   // data.orderCurryStatus = true;
-      //   // return "可出貨";
-      //   const res = data.orderList.some((item) => {
-      //     return item.status === true;
-      //   });
-      //   if (res) {
-      //     data.orderCurryStatus = true;
-      //     return "可出貨";
-      //   } else {
-      //     data.orderCurryStatus = "complete";
-      //     return "已出貨";
-      //   }
-      // }
       if (data.orderCurryStatus === false) {
         return "未到貨";
       } else if (data.orderCurryStatus === true) {
@@ -268,6 +257,27 @@ export default {
     goPlaceOrderBtn() {
       this.$router.push("/orderplace");
     },
+    goRemoveOrder(iid) {
+      this.deleteId = iid;
+      // console.log(this.deleteId);
+      //  deleteData(iid, "removeOrder", "delete")
+      const checkDel = window.prompt('欲刪除此訂單請輸入 "刪除" 並點擊確定');
+      if (checkDel === "刪除") {
+        deleteData(iid, "removeOrder", "delete")
+          .then((res) => {
+            if (res == 0) {
+              alert("訂單刪除成功");
+              this.$router.push("/");
+              setTimeout(() => {
+                this.$router.push("/orderList");
+              }, 500);
+            }
+          })
+          .catch((err) => {
+            console.log(`err:${err}`);
+          });
+      }
+    },
   },
 };
 </script>
@@ -294,9 +304,19 @@ export default {
   display: flex;
 }
 
-.goods_item > div {
-  flex: 11.1%;
+.goods_item .content_item {
+  flex: 11%;
   text-align: center;
+}
+
+.listItem_title,
+.list_item {
+  flex: 6% !important;
+}
+
+.orderNum,
+.orderNum_title {
+  flex: 17.2% !important;
 }
 
 .placeOrderBtn {
@@ -310,5 +330,9 @@ export default {
 
 .goods_item > div {
   line-height: 49px;
+}
+
+.edit_btn {
+  margin-right: 10px;
 }
 </style>

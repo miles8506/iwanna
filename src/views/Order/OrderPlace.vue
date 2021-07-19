@@ -24,7 +24,7 @@
           <span>{{ item.orderCount }}</span>
           <span>{{ item.orderColor }}</span>
           <span>{{ item.orderSize }}</span>
-          <span>{{ item.pGoods }}</span>
+          <span>{{ item.pGoods * item.orderCount }}</span>
           <span>{{ nativePriceNT(item.pGoods, item.orderCount) }}</span>
         </div>
         <div class="totalWrap">
