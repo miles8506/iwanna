@@ -3,12 +3,12 @@
     <h2 class="title">待叫貨清單列表</h2>
     <div class="orderPlace_hd">
       <div>廠商貨號</div>
-      <div>商品貨號</div>
-      <div>商品名稱</div>
-      <div>商品數量</div>
       <div>商品顏色</div>
       <div>商品尺寸</div>
+      <div>商品數量</div>
       <div>商品成本</div>
+      <div>商品名稱</div>
+      <div>商品貨號</div>
       <div>換算台幣</div>
     </div>
     <div class="orderPlace_bd">
@@ -19,12 +19,12 @@
           class="orderPlaceItem"
         >
           <span>{{ item.ordergNum }}</span>
-          <span>{{ item.orderSelfNum }}</span>
-          <span>{{ item.orderName }}</span>
-          <span>{{ item.orderCount }}</span>
           <span>{{ item.orderColor }}</span>
           <span>{{ item.orderSize }}</span>
+          <span>{{ item.orderCount }}</span>
           <span>{{ item.pGoods * item.orderCount }}</span>
+          <span>{{ item.orderName }}</span>
+          <span>{{ item.orderSelfNum }}</span>
           <span>{{ nativePriceNT(item.pGoods, item.orderCount) }}</span>
         </div>
         <div class="totalWrap">
@@ -71,28 +71,6 @@ export default {
           result.orderCount += goodListItem.orderCount;
         }
       });
-      // this.orderPlaceList.push(filterArr[0]);
-      // filterArr.forEach((item) => {
-      //   // const flag = this.orderPlaceList.find(item)
-      //   // item.find((item) => {
-      //   //   console.log(item);
-      //   // });
-      //   item.orderList.forEach((goodsItem) => {
-      //     // console.log(item);
-      //     // const flag = item.some(item=> item)
-      //     // console.log(goodsItem.orderColor,goodsItem.ordergNum,goodsItem.orderSize);
-      //     this.orderPlaceList.some((item) => {
-
-      //     });
-      //   });
-      // });
-      // filterArr.forEach((filterItem) => {
-      //   this.orderPlaceList.find((item) => {
-      //     console.log(filterItem);
-      //     console.log(item);
-      //   });
-      // });
-      // this.orderPlaceList = filterArr;
     });
   },
   methods: {
@@ -100,9 +78,6 @@ export default {
       const res = Math.ceil((parseInt(n_price) + 5) * 4.35);
       return res * count;
     },
-    // nativePriceCNY(n_price, count) {
-    //   return n_price
-    // }
   },
   computed: {
     NTtotal() {
