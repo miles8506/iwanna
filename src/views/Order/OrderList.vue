@@ -1,8 +1,10 @@
 <template>
   <div id="order_list">
     <button @click="goOrder">新增訂單</button>
+    <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
 
-    <div>
+    <order-search @resFilter="resFilter" @resFind="resFind" />
+    <!-- <div>
       出貨狀態：<select v-model="curryStatus" @change="curryStatusChange">
         <option value="">全部</option>
         <option value="complete">已出貨</option>
@@ -31,7 +33,7 @@
         v-model.trim="shopeeAccout"
       /><button @click="shopeeAccountSearch">查詢</button>
       <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
-    </div>
+    </div> -->
     <div class="order_hd">
       <div class="listItem_title">序列</div>
       <div class="orderNum_title">蝦皮/IG訂單編號</div>
@@ -95,29 +97,49 @@
 </template>
 
 <script>
+//network
 import deleteData from "network/requestSort.js";
 import { requestData } from "network/request.js";
+
+//component
 import AlertWindow from "components/alert/AlertWindow.vue";
+import OrderSearch from "./OrderSearch.vue";
+
+//js
 import dayjs from "dayjs";
+
 export default {
+  name: "OrderList",
   data() {
     return {
+      // mainGoodsListData: [],
       goodsListData: [],
-      curryStatus: "",
-      curryTimer: "",
-      shopeeAccout: "",
+      // curryStatus: "",
+      // curryTimer: "",
+      // shopeeAccout: "",
       isShow: false,
       shippedItem: {},
       isIndex: null,
       deleteId: "",
-      // 出貨狀態v-model
-      placeOrderStatus: "",
+      // // 出貨狀態v-model
+      // placeOrderStatus: "",
     };
   },
   components: {
     AlertWindow,
+    OrderSearch,
   },
-  created() {
+  // created() {
+  //   requestData(null, "orderList", "get")
+  //     .then((res) => {
+  //       // this.mainGoodsListData = res;
+  //       this.goodsListData = res;
+  //     })
+  //     .catch((err) => {
+  //       console.log(`err${err}`);
+  //     });
+  // },
+  activated() {
     requestData(null, "orderList", "get")
       .then((res) => {
         this.goodsListData = res;
@@ -125,6 +147,8 @@ export default {
       .catch((err) => {
         console.log(`err${err}`);
       });
+
+    window.scrollTo(0, this.$store.state.orderListHeight);
   },
   methods: {
     goOrder() {
@@ -144,6 +168,7 @@ export default {
       return timeFormat;
     },
     goEditOrder(item) {
+      this.$store.commit("setOrderListHeight", { height: window.pageYOffset });
       this.$router.push({
         path: `editOrder/${item.orderNum}`,
         query: {
@@ -151,66 +176,66 @@ export default {
         },
       });
     },
-    curryStatusChange() {
-      requestData(null, "orderList", "get")
-        .then((res) => {
-          if (this.curryStatus == "true") {
-            const curryStatusFilter = res.filter(
-              (item) => item.orderCurryStatus == true
-            );
-            this.goodsListData = curryStatusFilter;
-          } else if (this.curryStatus == "false") {
-            const curryStatusFilter = res.filter(
-              (item) => item.orderCurryStatus == false
-            );
-            this.goodsListData = curryStatusFilter;
-          } else if (this.curryStatus == "") {
-            this.goodsListData = res;
-          } else if (this.curryStatus == "complete") {
-            const curryStatusFilter = res.filter(
-              (item) => item.orderCurryStatus === "complete"
-            );
-            this.goodsListData = curryStatusFilter;
-          }
-        })
-        .catch((err) => {
-          console.log(`err${err}`);
-        });
-    },
-    curryTimerChange() {
-      requestData(null, "orderList", "get")
-        .then((res) => {
-          if (this.curryTimer == "last") {
-            this.goodsListData = res.sort((a, b) => {
-              return b.lastShipment - a.lastShipment;
-            });
-          } else if (this.curryTimer == "first") {
-            this.goodsListData = res.sort((a, b) => {
-              return a.lastShipment - b.lastShipment;
-            });
-          } else if (this.curryTimer == "") {
-            this.goodsListData = res;
-          }
-        })
-        .catch((err) => {
-          console.log(`err${err}`);
-        });
-    },
-    shopeeAccountSearch() {
-      if (this.shopeeAccout == "") return alert("請輸入蝦皮/IG帳號");
-      requestData(null, "orderList", "get")
-        .then((res) => {
-          const findObj = res.find(
-            (item) => item.shopeeAccount == this.shopeeAccout
-          );
-          if (findObj == undefined) return alert("查無蝦皮/IG帳號，請重新輸入");
-          this.goodsListData = [];
-          this.goodsListData.push(findObj);
-        })
-        .catch((err) => {
-          console.log(`err${err}`);
-        });
-    },
+    // curryStatusChange() {
+    //   requestData(null, "orderList", "get")
+    //     .then((res) => {
+    //       if (this.curryStatus == "true") {
+    //         const curryStatusFilter = res.filter(
+    //           (item) => item.orderCurryStatus == true
+    //         );
+    //         this.goodsListData = curryStatusFilter;
+    //       } else if (this.curryStatus == "false") {
+    //         const curryStatusFilter = res.filter(
+    //           (item) => item.orderCurryStatus == false
+    //         );
+    //         this.goodsListData = curryStatusFilter;
+    //       } else if (this.curryStatus == "") {
+    //         this.goodsListData = res;
+    //       } else if (this.curryStatus == "complete") {
+    //         const curryStatusFilter = res.filter(
+    //           (item) => item.orderCurryStatus === "complete"
+    //         );
+    //         this.goodsListData = curryStatusFilter;
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(`err${err}`);
+    //     });
+    // },
+    // curryTimerChange() {
+    //   requestData(null, "orderList", "get")
+    //     .then((res) => {
+    //       if (this.curryTimer == "last") {
+    //         this.goodsListData = res.sort((a, b) => {
+    //           return b.lastShipment - a.lastShipment;
+    //         });
+    //       } else if (this.curryTimer == "first") {
+    //         this.goodsListData = res.sort((a, b) => {
+    //           return a.lastShipment - b.lastShipment;
+    //         });
+    //       } else if (this.curryTimer == "") {
+    //         this.goodsListData = res;
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(`err${err}`);
+    //     });
+    // },
+    // shopeeAccountSearch() {
+    //   if (this.shopeeAccout == "") return alert("請輸入蝦皮/IG帳號");
+    //   requestData(null, "orderList", "get")
+    //     .then((res) => {
+    //       const findObj = res.find(
+    //         (item) => item.shopeeAccount == this.shopeeAccout
+    //       );
+    //       if (findObj == undefined) return alert("查無蝦皮/IG帳號，請重新輸入");
+    //       this.goodsListData = [];
+    //       this.goodsListData.push(findObj);
+    //     })
+    //     .catch((err) => {
+    //       console.log(`err${err}`);
+    //     });
+    // },
     shippedBtnClick(item, index) {
       if (!item.placeOrder) return alert("請先確認叫貨狀態為已叫貨");
       this.isShow = !this.isShow;
@@ -241,42 +266,42 @@ export default {
           console.log(`err${err}`);
         });
     },
-    placeOrderChange() {
-      requestData(null, "orderList", "get").then((res) => {
-        if (this.placeOrderStatus === "") {
-          this.goodsListData = res;
-        } else if (this.placeOrderStatus === "orderPlaceTrue") {
-          const filterArr = res.filter((item) => item.placeOrder === true);
-          this.goodsListData = filterArr;
-        } else if (this.placeOrderStatus === "orderPlaceFalse") {
-          const filterArr = res.filter((item) => item.placeOrder === false);
-          this.goodsListData = filterArr;
-        }
-      });
-    },
+    // placeOrderChange() {
+    //   requestData(null, "orderList", "get").then((res) => {
+    //     if (this.placeOrderStatus === "") {
+    //       this.goodsListData = res;
+    //     } else if (this.placeOrderStatus === "orderPlaceTrue") {
+    //       const filterArr = res.filter((item) => item.placeOrder === true);
+    //       this.goodsListData = filterArr;
+    //     } else if (this.placeOrderStatus === "orderPlaceFalse") {
+    //       const filterArr = res.filter((item) => item.placeOrder === false);
+    //       this.goodsListData = filterArr;
+    //     }
+    //   });
+    // },
     goPlaceOrderBtn() {
       this.$router.push("/orderplace");
     },
     goRemoveOrder(iid) {
       this.deleteId = iid;
-      // console.log(this.deleteId);
-      //  deleteData(iid, "removeOrder", "delete")
       const checkDel = window.prompt('欲刪除此訂單請輸入 "刪除" 並點擊確定');
       if (checkDel === "刪除") {
         deleteData(iid, "removeOrder", "delete")
           .then((res) => {
-            if (res == 0) {
-              alert("訂單刪除成功");
-              this.$router.push("/");
-              setTimeout(() => {
-                this.$router.push("/orderList");
-              }, 500);
-            }
+            this.goodsListData = res;
+            alert("訂單刪除成功");
           })
           .catch((err) => {
             console.log(`err:${err}`);
           });
       }
+    },
+    resFilter(res) {
+      this.goodsListData = res;
+    },
+    resFind(res) {
+      this.goodsListData = [];
+      this.goodsListData.push(res);
     },
   },
 };
