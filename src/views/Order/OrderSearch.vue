@@ -181,7 +181,6 @@ export default {
             }
           });
           const resArr = arr.filter((item) => item.orderCurryStatus === false);
-          console.log(resArr);
           this.$emit("resFilter", resArr);
         })
         .catch((err) => {
