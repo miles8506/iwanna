@@ -63,6 +63,7 @@
               v-for="(value, key, index) in goodsListPaginationData"
               :key="key"
               @click="paginationBtn(index + 1)"
+              :class="{ current_index: index + 1 == paginationNative }"
             >
               {{ index + 1 }}
             </span>
@@ -72,21 +73,6 @@
     </div>
     <div v-else>
       <h2>查無訂單</h2>
-      <!-- <div class="pagination_bar">
-        <span
-            v-for="(value, key, index) in goodsListPaginationData"
-            :key="key"
-            @click="paginationBtn(index + 1)"
-          >
-            {{ index + 1 }}
-          </span>
-        <div class="pagination_wrap">
-          <span>1</span>
-          <span>2</span>
-          <span>3</span>
-          <span>4</span>
-        </div>
-      </div> -->
     </div>
     <!-- 警視窗 -->
     <alert-window :isShow="isShow" @editShow="editShow">
@@ -129,15 +115,10 @@ export default {
       // 當前頁數
       paginationNative: 1,
 
-      // curryStatus: "",
-      // curryTimer: "",
-      // shopeeAccout: "",
       isShow: false,
       shippedItem: {},
       isIndex: null,
       deleteId: "",
-      // // 出貨狀態v-model
-      // placeOrderStatus: "",
     };
   },
   components: {
@@ -282,6 +263,7 @@ export default {
     // paginationBar
     paginationBtn(index) {
       this.paginationNative = index;
+      window.scrollTo(0, 0);
     },
   },
 };
@@ -360,6 +342,12 @@ export default {
 }
 
 .pagination_bar .pagination_wrap > span:hover {
+  background-color: #999999;
+  color: #fff;
+  opacity: 0.8;
+}
+
+.current_index {
   background-color: #999999;
   color: #fff;
 }
