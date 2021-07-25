@@ -8,36 +8,6 @@
       @resFind="resFind"
       @resActivated="resActivated"
     />
-    <!-- <div>
-      出貨狀態：<select v-model="curryStatus" @change="curryStatusChange">
-        <option value="">全部</option>
-        <option value="complete">已出貨</option>
-        <option value="true">可出貨</option>
-        <option value="false">未出貨</option>
-      </select>
-    </div>
-    <div>
-      叫貨狀態：<select v-model="placeOrderStatus" @change="placeOrderChange">
-        <option value="">全部</option>
-        <option value="orderPlaceTrue">已叫貨</option>
-        <option value="orderPlaceFalse">未叫貨</option>
-      </select>
-    </div>
-    <div>
-      最晚出貨日期：
-      <select name="" v-model="curryTimer" @change="curryTimerChange">
-        <option value="">全部</option>
-        <option value="first">早>晚</option>
-        <option value="last">晚>早</option>
-      </select>
-    </div>
-    <div class="shopeeAndPlaceOrderWrap">
-      蝦皮/IG訂單帳號查詢<input
-        type="text"
-        v-model.trim="shopeeAccout"
-      /><button @click="shopeeAccountSearch">查詢</button>
-      <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
-    </div> -->
     <div class="order_hd">
       <div class="listItem_title">序列</div>
       <div class="orderNum_title">蝦皮/IG訂單編號</div>
@@ -53,10 +23,14 @@
       <div class="order_bd">
         <div
           class="goods_item"
-          v-for="(item, index) in goodsListData"
+          v-for="(item, index) in goodsListPaginationData[
+            'page' + paginationNative
+          ]"
           :key="index"
         >
-          <div class="content_item list_item">{{ index + 1 }}</div>
+          <div class="content_item list_item">
+            {{ (paginationNative - 1) * 20 + index + 1 }}
+          </div>
           <div class="orderNum content_item">{{ item.shopeeAccount }}</div>
           <div class="buyerAccount content_item">{{ item.buyerAccount }}</div>
           <div class="orderTotal content_item">{{ item.orderTotal }}</div>
@@ -83,10 +57,36 @@
             <button @click="goRemoveOrder(item.orderNum)">刪除</button>
           </div>
         </div>
+        <div class="pagination_bar">
+          <div class="pagination_wrap">
+            <span
+              v-for="(value, key, index) in goodsListPaginationData"
+              :key="key"
+              @click="paginationBtn(index + 1)"
+            >
+              {{ index + 1 }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
     <div v-else>
       <h2>查無訂單</h2>
+      <!-- <div class="pagination_bar">
+        <span
+            v-for="(value, key, index) in goodsListPaginationData"
+            :key="key"
+            @click="paginationBtn(index + 1)"
+          >
+            {{ index + 1 }}
+          </span>
+        <div class="pagination_wrap">
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+        </div>
+      </div> -->
     </div>
     <!-- 警視窗 -->
     <alert-window :isShow="isShow" @editShow="editShow">
@@ -111,13 +111,24 @@ import OrderSearch from "./OrderSearch.vue";
 
 //js
 import dayjs from "dayjs";
+import { paginationBarJs } from "assets/js/paginationBar.js";
 
 export default {
   name: "OrderList",
   data() {
     return {
-      // mainGoodsListData: [],
+      //所有orderlist
       goodsListData: [],
+
+      //由goodListData分配頁數後的物件
+      goodsListPaginationData: {},
+
+      // 計算頁數
+      pagination: null,
+
+      // 當前頁數
+      paginationNative: 1,
+
       // curryStatus: "",
       // curryTimer: "",
       // shopeeAccout: "",
@@ -136,8 +147,13 @@ export default {
   created() {
     requestData(null, "orderList", "get")
       .then((res) => {
-        // this.mainGoodsListData = res;
-        this.goodsListData = res;
+        const { goodsListData, goodsListPaginationData } = paginationBarJs(
+          res,
+          this.goodsListData,
+          this.goodsListPaginationData
+        );
+        this.goodsListData = goodsListData;
+        this.goodsListPaginationData = goodsListPaginationData;
       })
       .catch((err) => {
         console.log(`err${err}`);
@@ -175,66 +191,7 @@ export default {
         },
       });
     },
-    // curryStatusChange() {
-    //   requestData(null, "orderList", "get")
-    //     .then((res) => {
-    //       if (this.curryStatus == "true") {
-    //         const curryStatusFilter = res.filter(
-    //           (item) => item.orderCurryStatus == true
-    //         );
-    //         this.goodsListData = curryStatusFilter;
-    //       } else if (this.curryStatus == "false") {
-    //         const curryStatusFilter = res.filter(
-    //           (item) => item.orderCurryStatus == false
-    //         );
-    //         this.goodsListData = curryStatusFilter;
-    //       } else if (this.curryStatus == "") {
-    //         this.goodsListData = res;
-    //       } else if (this.curryStatus == "complete") {
-    //         const curryStatusFilter = res.filter(
-    //           (item) => item.orderCurryStatus === "complete"
-    //         );
-    //         this.goodsListData = curryStatusFilter;
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log(`err${err}`);
-    //     });
-    // },
-    // curryTimerChange() {
-    //   requestData(null, "orderList", "get")
-    //     .then((res) => {
-    //       if (this.curryTimer == "last") {
-    //         this.goodsListData = res.sort((a, b) => {
-    //           return b.lastShipment - a.lastShipment;
-    //         });
-    //       } else if (this.curryTimer == "first") {
-    //         this.goodsListData = res.sort((a, b) => {
-    //           return a.lastShipment - b.lastShipment;
-    //         });
-    //       } else if (this.curryTimer == "") {
-    //         this.goodsListData = res;
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log(`err${err}`);
-    //     });
-    // },
-    // shopeeAccountSearch() {
-    //   if (this.shopeeAccout == "") return alert("請輸入蝦皮/IG帳號");
-    //   requestData(null, "orderList", "get")
-    //     .then((res) => {
-    //       const findObj = res.find(
-    //         (item) => item.shopeeAccount == this.shopeeAccout
-    //       );
-    //       if (findObj == undefined) return alert("查無蝦皮/IG帳號，請重新輸入");
-    //       this.goodsListData = [];
-    //       this.goodsListData.push(findObj);
-    //     })
-    //     .catch((err) => {
-    //       console.log(`err${err}`);
-    //     });
-    // },
+
     shippedBtnClick(item, index) {
       if (!item.placeOrder) return alert("請先確認叫貨狀態為已叫貨");
       this.isShow = !this.isShow;
@@ -267,19 +224,7 @@ export default {
           console.log(`err${err}`);
         });
     },
-    // placeOrderChange() {
-    //   requestData(null, "orderList", "get").then((res) => {
-    //     if (this.placeOrderStatus === "") {
-    //       this.goodsListData = res;
-    //     } else if (this.placeOrderStatus === "orderPlaceTrue") {
-    //       const filterArr = res.filter((item) => item.placeOrder === true);
-    //       this.goodsListData = filterArr;
-    //     } else if (this.placeOrderStatus === "orderPlaceFalse") {
-    //       const filterArr = res.filter((item) => item.placeOrder === false);
-    //       this.goodsListData = filterArr;
-    //     }
-    //   });
-    // },
+
     goPlaceOrderBtn() {
       this.$router.push("/orderplace");
     },
@@ -290,7 +235,14 @@ export default {
       if (checkDel === "刪除") {
         deleteData(iid, "removeOrder", "delete")
           .then((res) => {
-            this.goodsListData = res;
+            // this.goodsListPaginationData = {};
+            const { goodsListData, goodsListPaginationData } = paginationBarJs(
+              res,
+              this.goodsListData,
+              this.goodsListPaginationData
+            );
+            this.goodsListData = goodsListData;
+            this.goodsListPaginationData = goodsListPaginationData;
             alert("訂單刪除成功");
           })
           .catch((err) => {
@@ -300,7 +252,13 @@ export default {
     },
 
     resFilter(res) {
-      this.goodsListData = res;
+      const { goodsListData, goodsListPaginationData } = paginationBarJs(
+        res,
+        this.goodsListData,
+        this.goodsListPaginationData
+      );
+      this.goodsListData = goodsListData;
+      this.goodsListPaginationData = goodsListPaginationData;
     },
 
     // orderlist activated返回至相同位置&data(bus=>orderSearch)
@@ -310,7 +268,20 @@ export default {
 
     resFind(res) {
       this.goodsListData = [];
+      // this.goodsListPaginationData = {};
       this.goodsListData.push(res);
+      const { goodsListData, goodsListPaginationData } = paginationBarJs(
+        null,
+        this.goodsListData,
+        this.goodsListPaginationData
+      );
+      this.goodsListData = goodsListData;
+      this.goodsListPaginationData = goodsListPaginationData;
+    },
+
+    // paginationBar
+    paginationBtn(index) {
+      this.paginationNative = index;
     },
   },
 };
@@ -368,5 +339,28 @@ export default {
 
 .edit_btn {
   margin-right: 10px;
+}
+
+.pagination_bar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0 40px;
+}
+
+.pagination_bar .pagination_wrap > span {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  margin: 0 5px;
+  border: 1px solid #999999;
+  border-radius: 13px;
+  text-align: center;
+  line-height: 26px;
+  cursor: pointer;
+}
+
+.pagination_bar .pagination_wrap > span:hover {
+  background-color: #999999;
+  color: #fff;
 }
 </style>

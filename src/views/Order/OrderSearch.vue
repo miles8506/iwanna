@@ -100,6 +100,7 @@ export default {
           // 出貨狀態filter
           this.shopeeAccout = "";
           this.orderNumberModel = "";
+          this.selfNumberModel = "";
           let curryStateFilter = [];
           if (this.curryStatus !== "") {
             curryStateFilter = res.filter(
@@ -155,7 +156,6 @@ export default {
             }
           });
           const resArr = arr.filter((item) => item.orderCurryStatus === false);
-          console.log(resArr);
           this.$emit("resFilter", resArr);
         })
         .catch((err) => {
