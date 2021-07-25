@@ -1,5 +1,6 @@
 <template>
   <div id="ordersearch_bar">
+    <!-- state_wrap start -->
     <div class="ordersearch_status">
       <div>
         出貨狀態：<select v-model="curryStatus">
@@ -26,12 +27,32 @@
         <button @click="searchState" class="status_btn">搜尋</button>
       </div>
     </div>
+    <!-- state_wrap end -->
+
+    <!-- order_number start -->
+    <div class="order_number_wrap">
+      <label for="order_number">廠商貨號:</label
+      ><input type="text" id="order_number" v-model.trim="orderNumberModel" />
+      <button @click="orderNumberBtn" class="order_number_btn">搜尋</button>
+    </div>
+    <!-- order_number end -->
+
+    <!-- self_number start -->
+    <div class="self_number_wrap">
+      <label for="self_number">商品貨號:</label
+      ><input type="text" id="self_number" v-model.trim="selfNumberModel" />
+      <button @click="selfNumberBtn" class="self_number_btn">搜尋</button>
+    </div>
+    <!-- self_number end -->
+
+    <!-- shopee start -->
     <div class="shopeeAndPlaceOrderWrap">
       蝦皮/IG訂單帳號查詢：<input
         type="text"
         v-model.trim="shopeeAccout"
       /><button @click="shopeeAccountSearch" class="shopee_btn">搜尋</button>
     </div>
+    <!-- shopee end -->
   </div>
 </template>
 
@@ -48,13 +69,37 @@ export default {
       placeOrderStatus: "",
       curryTimer: "",
       shopeeAccout: "",
+
+      orderNumberModel: "",
+      selfNumberModel: "",
     };
   },
+  mounted() {
+    // orderlist activated返回至相同位置&data
+    this.$bus.$on("nativeDataList", () => {
+      if (this.shopeeAccout !== "") {
+        this.shopeeAccountSearch();
+      } else if (this.orderNumberModel !== "") {
+        this.orderNumberBtn();
+      } else if (this.selfNumberModel !== "") {
+        this.selfNumberBtn();
+      } else {
+        this.searchState();
+        this.$emit("resActivated");
+      }
+    });
+  },
+  destroyed() {
+    this.$bus.$off("nativeDataList");
+  },
   methods: {
+    // 出貨狀態、叫貨狀態、最晚出貨日期smartSearch
     searchState() {
       requestData(null, "orderList", "get")
         .then((res) => {
           // 出貨狀態filter
+          this.shopeeAccout = "";
+          this.orderNumberModel = "";
           let curryStateFilter = [];
           if (this.curryStatus !== "") {
             curryStateFilter = res.filter(
@@ -93,16 +138,69 @@ export default {
         });
     },
 
+    // 廠商貨號smartSearch
+    orderNumberBtn() {
+      if (this.orderNumberModel == "") return alert("請輸入廠商貨號");
+      const arr = [];
+      requestData(null, "orderList", "get")
+        .then((res) => {
+          this.selfNumberModel = "";
+          this.shopeeAccout = "";
+          res.forEach((item) => {
+            const resSome = item.orderList.some(
+              (item) => item.ordergNum == this.orderNumberModel
+            );
+            if (resSome) {
+              arr.push(item);
+            }
+          });
+          const resArr = arr.filter((item) => item.orderCurryStatus === false);
+          console.log(resArr);
+          this.$emit("resFilter", resArr);
+        })
+        .catch((err) => {
+          alert("系統異常，請稍後再試");
+          console.log(`err:${err}`);
+        });
+    },
+
+    // 商品貨號smartSearch
+    selfNumberBtn() {
+      if (this.selfNumberModel == "") return alert("請輸入廠商貨號");
+      const arr = [];
+      requestData(null, "orderList", "get")
+        .then((res) => {
+          this.orderNumberModel = "";
+          this.shopeeAccout = "";
+          res.forEach((item) => {
+            const resSome = item.orderList.some(
+              (item) => item.orderSelfNum == this.selfNumberModel
+            );
+            if (resSome) {
+              arr.push(item);
+            }
+          });
+          const resArr = arr.filter((item) => item.orderCurryStatus === false);
+          console.log(resArr);
+          this.$emit("resFilter", resArr);
+        })
+        .catch((err) => {
+          alert("系統異常，請稍後再試");
+          console.log(`err:${err}`);
+        });
+    },
+
+    // 蝦皮/IG訂單帳號查詢smartSearch
     shopeeAccountSearch() {
       if (this.shopeeAccout == "") return alert("請輸入蝦皮/IG帳號");
       requestData(null, "orderList", "get")
         .then((res) => {
+          this.orderNumberModel = "";
+          this.selfNumberModel = "";
           const findObj = res.find(
             (item) => item.shopeeAccount == this.shopeeAccout
           );
           if (findObj == undefined) return alert("查無蝦皮/IG帳號，請重新輸入");
-          // this.goodsListData = [];
-          // this.goodsListData.push(findObj);
           this.$emit("resFind", findObj);
         })
         .catch((err) => {
@@ -123,13 +221,17 @@ export default {
   margin-right: 20px;
 }
 
-.shopeeAndPlaceOrderWrap {
+.shopeeAndPlaceOrderWrap,
+.order_number_wrap,
+.self_number_wrap {
   margin-bottom: 20px;
 }
 
 .ordersearch_status .status_btn,
-.shopeeAndPlaceOrderWrap .shopee_btn {
-  margin-left: 30px;
+.shopeeAndPlaceOrderWrap .shopee_btn,
+.order_number_wrap .order_number_btn,
+.self_number_wrap .self_number_btn {
+  margin-left: 20px;
   border: 0;
   width: 50px;
   height: 25px;

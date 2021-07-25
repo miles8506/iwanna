@@ -9,6 +9,9 @@ Vue.prototype.$ = $
 
 Vue.config.productionTip = false
 
+// bus
+Vue.prototype.$bus = new Vue();
+
 new Vue({
   router,
   store,

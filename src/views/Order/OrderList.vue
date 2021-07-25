@@ -3,7 +3,11 @@
     <button @click="goOrder">新增訂單</button>
     <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
 
-    <order-search @resFilter="resFilter" @resFind="resFind" />
+    <order-search
+      @resFilter="resFilter"
+      @resFind="resFind"
+      @resActivated="resActivated"
+    />
     <!-- <div>
       出貨狀態：<select v-model="curryStatus" @change="curryStatusChange">
         <option value="">全部</option>
@@ -129,31 +133,24 @@ export default {
     AlertWindow,
     OrderSearch,
   },
-  // created() {
-  //   requestData(null, "orderList", "get")
-  //     .then((res) => {
-  //       // this.mainGoodsListData = res;
-  //       this.goodsListData = res;
-  //     })
-  //     .catch((err) => {
-  //       console.log(`err${err}`);
-  //     });
-  // },
-  activated() {
+  created() {
     requestData(null, "orderList", "get")
       .then((res) => {
+        // this.mainGoodsListData = res;
         this.goodsListData = res;
       })
       .catch((err) => {
         console.log(`err${err}`);
       });
-
-    window.scrollTo(0, this.$store.state.orderListHeight);
+  },
+  activated() {
+    this.$bus.$emit("nativeDataList");
   },
   methods: {
     goOrder() {
       this.$router.push("/order");
     },
+
     shipStatus(data) {
       if (data.orderCurryStatus === false) {
         return "未到貨";
@@ -163,10 +160,12 @@ export default {
         return "已出貨";
       }
     },
+
     lastShipDate(item) {
       const timeFormat = dayjs(item).format("YYYY/MM/DD");
       return timeFormat;
     },
+
     goEditOrder(item) {
       this.$store.commit("setOrderListHeight", { height: window.pageYOffset });
       this.$router.push({
@@ -242,9 +241,11 @@ export default {
       this.shippedItem = item;
       this.isIndex = index;
     },
+
     editShow() {
       this.isShow = !this.isShow;
     },
+
     isShipped() {
       const findObj = this.goodsListData.find(
         (item) => item === this.shippedItem
@@ -282,6 +283,7 @@ export default {
     goPlaceOrderBtn() {
       this.$router.push("/orderplace");
     },
+
     goRemoveOrder(iid) {
       this.deleteId = iid;
       const checkDel = window.prompt('欲刪除此訂單請輸入 "刪除" 並點擊確定');
@@ -296,9 +298,16 @@ export default {
           });
       }
     },
+
     resFilter(res) {
       this.goodsListData = res;
     },
+
+    // orderlist activated返回至相同位置&data(bus=>orderSearch)
+    resActivated(res) {
+      window.scrollTo(0, this.$store.state.orderListHeight);
+    },
+
     resFind(res) {
       this.goodsListData = [];
       this.goodsListData.push(res);
