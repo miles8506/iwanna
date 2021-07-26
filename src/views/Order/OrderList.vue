@@ -233,6 +233,7 @@ export default {
     },
 
     resFilter(res) {
+      this.paginationNative = 1;
       const { goodsListData, goodsListPaginationData } = paginationBarJs(
         res,
         this.goodsListData,
@@ -248,8 +249,8 @@ export default {
     },
 
     resFind(res) {
+      this.paginationNative = 1;
       this.goodsListData = [];
-      // this.goodsListPaginationData = {};
       this.goodsListData.push(res);
       const { goodsListData, goodsListPaginationData } = paginationBarJs(
         null,
