@@ -2,10 +2,6 @@ const path = require('path');
 const webpack = require("webpack");
 const resolve = dir => path.join(__dirname, dir);
 module.exports = {
-  devServer: {
-    hot: false
-  },
-
   publicPath: process.env.NODE_ENV === 'production'
     ? '/iwanna/'
     : '/',

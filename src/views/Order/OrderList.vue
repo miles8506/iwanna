@@ -141,6 +141,7 @@ export default {
       });
   },
   activated() {
+    // orderSearch.vue
     this.$bus.$emit("nativeDataList");
   },
   methods: {

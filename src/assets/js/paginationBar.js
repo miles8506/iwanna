@@ -3,6 +3,7 @@ export function paginationBarJs(res, goodsListData, goodsListPaginationData) {
   goodsListPaginationData = {};
   let paginations = goodsListData.length / 20;
   if (paginations < 1) paginations = 1;
+  if (paginations % 1 !== 0) paginations++;
   paginations = parseInt(paginations.toFixed(0));
   for (let i = 0; i < paginations; i++) {
     goodsListPaginationData["page" + (i + 1)] = [];
