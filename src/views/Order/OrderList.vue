@@ -56,6 +56,7 @@
             <button @click="goEditOrder(item)" class="edit_btn">編輯</button>
             <button @click="goRemoveOrder(item.orderNum)">刪除</button>
           </div>
+          <div class="point_note" v-if="isShowNoteAlert(item)">!</div>
         </div>
         <div class="pagination_bar">
           <div class="pagination_wrap">
@@ -267,6 +268,14 @@ export default {
       this.paginationNative = index;
       window.scrollTo(0, 0);
     },
+
+    // show 備註提示
+    isShowNoteAlert(order) {
+      const flag = order.orderList.some((item) => {
+        return item.orderNote !== "";
+      });
+      return flag;
+    },
   },
 };
 </script>
@@ -290,6 +299,7 @@ export default {
 }
 
 .order_bd .goods_item {
+  position: relative;
   display: flex;
 }
 
@@ -352,5 +362,21 @@ export default {
 .current_index {
   background-color: #999999;
   color: #fff;
+}
+
+.point_note {
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 20px !important;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  background-color: rgb(255, 0, 0);
 }
 </style>
