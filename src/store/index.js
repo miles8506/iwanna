@@ -6,10 +6,18 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     orderListHeight: 0,
+    paginationNative: 1,
+    paginationStatus: false,
   },
   mutations: {
     setOrderListHeight(state, payload) {
-      state.orderListHeight = payload.height
+      state.orderListHeight = payload.height;
+    },
+    setPaginationNative(state, payload) {
+      state.paginationNative = payload.page;
+    },
+    setPaginationStatus(state, payload) {
+      state.paginationStatus = payload.status;
     }
   },
   actions: {

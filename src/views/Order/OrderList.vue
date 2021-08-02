@@ -24,12 +24,12 @@
         <div
           class="goods_item"
           v-for="(item, index) in goodsListPaginationData[
-            'page' + paginationNative
+            'page' + $store.state.paginationNative
           ]"
           :key="index"
         >
           <div class="content_item list_item">
-            {{ (paginationNative - 1) * 20 + index + 1 }}
+            {{ ($store.state.paginationNative - 1) * 20 + index + 1 }}
           </div>
           <div class="orderNum content_item">{{ item.shopeeAccount }}</div>
           <div class="buyerAccount content_item">{{ item.buyerAccount }}</div>
@@ -64,7 +64,9 @@
               v-for="(value, key, index) in goodsListPaginationData"
               :key="key"
               @click="paginationBtn(index + 1)"
-              :class="{ current_index: index + 1 == paginationNative }"
+              :class="{
+                current_index: index + 1 == $store.state.paginationNative,
+              }"
             >
               {{ index + 1 }}
             </span>
@@ -142,8 +144,10 @@ export default {
       });
   },
   activated() {
+    this.$store.commit("setPaginationStatus", { status: true });
     // orderSearch.vue
     this.$bus.$emit("nativeDataList");
+    // this.paginationNative = this.$store.state.paginationNative;
   },
   methods: {
     goOrder() {
@@ -235,7 +239,11 @@ export default {
     },
 
     resFilter(res) {
-      this.paginationNative = 1;
+      // this.paginationNative = 1;
+      if (!this.$store.state.paginationStatus) {
+        this.$store.commit("setPaginationNative", { page: 1 });
+      }
+      // console.log({res,goodsListData:this.goodsListData,goodsListPaginationData:this.goodsListPaginationData});
       const { goodsListData, goodsListPaginationData } = paginationBarJs(
         res,
         this.goodsListData,
@@ -243,6 +251,7 @@ export default {
       );
       this.goodsListData = goodsListData;
       this.goodsListPaginationData = goodsListPaginationData;
+      this.$store.commit("setPaginationStatus", { status: false });
     },
 
     // orderlist activated返回至相同位置&data(bus=>orderSearch)
@@ -251,7 +260,10 @@ export default {
     },
 
     resFind(res) {
-      this.paginationNative = 1;
+      // this.paginationNative = 1;
+      if (!this.$store.state.paginationStatus) {
+        this.$store.commit("setPaginationNative", { page: 1 });
+      }
       this.goodsListData = [];
       this.goodsListData.push(res);
       const { goodsListData, goodsListPaginationData } = paginationBarJs(
@@ -261,11 +273,13 @@ export default {
       );
       this.goodsListData = goodsListData;
       this.goodsListPaginationData = goodsListPaginationData;
+      this.$store.commit("setPaginationStatus", { status: false });
     },
 
     // paginationBar
     paginationBtn(index) {
-      this.paginationNative = index;
+      // this.paginationNative = index;
+      this.$store.commit("setPaginationNative", { page: index });
       window.scrollTo(0, 0);
     },
 

@@ -72,7 +72,7 @@ import { requestData } from "network/request.js";
 import AlertWindow from "components/alert/AlertWindow.vue";
 
 //js
-import { paginationBarJs } from "assets/js/paginationBar.js";
+// import { paginationBarJs } from "assets/js/paginationBar.js";
 
 import dayjs from "dayjs";
 export default {

@@ -4,7 +4,8 @@ export function paginationBarJs(res, goodsListData, goodsListPaginationData) {
   let paginations = goodsListData.length / 20;
   if (paginations < 1) paginations = 1;
   if (paginations % 1 !== 0) paginations++;
-  paginations = parseInt(paginations.toFixed(0));
+  // paginations = parseInt(paginations.toFixed(0));
+  paginations = Math.floor(paginations);
   for (let i = 0; i < paginations; i++) {
     goodsListPaginationData["page" + (i + 1)] = [];
     for (let k = 0; k < 20; k++) {

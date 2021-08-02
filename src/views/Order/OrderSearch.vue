@@ -135,7 +135,7 @@ export default {
           this.$emit("resFilter", placeOrderFilter);
         })
         .catch((err) => {
-          alert(`系統異常(orderSearch)/${err}`);
+          alert(`系統異常(orderSearch)${err}`);
         });
     },
 
