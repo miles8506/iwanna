@@ -22,7 +22,7 @@
           <span>{{ item.orderColor }}</span>
           <span>{{ item.orderSize }}</span>
           <span>{{ item.orderCount }}</span>
-          <span>{{ item.pGoods * item.orderCount }}</span>
+          <span>${{ item.pGoods * item.orderCount }}</span>
           <span>{{ item.orderName }}</span>
           <span>{{ item.orderSelfNum }}</span>
           <span>{{ nativePriceNT(item.pGoods, item.orderCount) }}</span>
