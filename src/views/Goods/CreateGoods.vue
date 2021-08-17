@@ -1,29 +1,39 @@
   <template>
   <div id="Goods">
-    <div class="goodsNum">
+    <div class="goodsNum" style="margin-bottom: 15px">
       <label for="gNum"
-        >廠商貨號<input type="text" id="gNum" v-model="gNum"
+        >廠商貨號:
+        <input type="text" id="gNum" v-model="gNum" class="goods_edit_ipt"
       /></label>
     </div>
-    <div class="goodsNum">
+    <div class="goodsNum" style="margin-bottom: 15px">
       <label for="selfNum"
-        >商品貨號<input type="text" id="selfNum" v-model.number="selfNum" />
+        >商品貨號:
+        <input
+          type="text"
+          id="selfNum"
+          v-model.number="selfNum"
+          class="goods_edit_ipt"
+        />
       </label>
       &nbsp
       <span style="color: red">*只能填寫數字</span>
     </div>
-    <div class="goodsName">
+    <div class="goodsName" style="margin-bottom: 15px">
       <label for="gName"
-        >商品名稱<input type="text" id="gName" v-model="gName"
+        >商品名稱:
+        <input type="text" id="gName" v-model="gName" class="goods_edit_ipt"
       /></label>
     </div>
-    <div class="price">
+    <div class="price" style="margin-bottom: 15px">
       <template>
         <label for="pGoods"
-          >成本價(人民幣)<input
+          >成本價(人民幣):
+          <input
             type="text"
             id="pGoods"
             v-model.trim="pGoods"
+            class="goods_edit_ipt"
             ref="nativePriceIpt" /></label
         ><button @click="checkNativePrice" v-if="isShowNativePriceBtn">
           確定
@@ -31,20 +41,23 @@
       </template>
     </div>
     <div class="sugPrice" v-if="isShowComputedPrice">
-      <div>成本價(台幣){{ nativeNT }}</div>
-      <div>最低售價：{{ minimumPrice }}</div>
-      <div>建議售價：{{ bestPrice }}</div>
-      <div>
+      <div style="margin-bottom: 15px">成本價(台幣): {{ nativeNT }}</div>
+      <div style="margin-bottom: 15px">最低售價: {{ minimumPrice }}</div>
+      <div style="margin-bottom: 15px">建議售價: {{ bestPrice }}</div>
+      <div style="margin-bottom: 15px">
         <label for="final_price"
-          >最後定價：<input
+          >最後定價:
+          <input
             type="text"
             id="final_price"
             v-model.number="finalPrice"
+            class="goods_edit_ipt"
         /></label>
       </div>
     </div>
-    <div>
-      檔期種類名稱<select name="sort" id="" v-model="sort">
+    <div style="margin-bottom: 15px">
+      檔期種類名稱:
+      <select name="sort" id="" v-model="sort">
         <option value="">請選擇</option>
         <option
           :value="item"
@@ -55,8 +68,8 @@
         </option>
       </select>
     </div>
-    <div class="goodsColor">
-      顏色
+    <div class="goodsColor" style="margin-bottom: 15px">
+      顏色:
       <label for="F"
         ><input type="checkbox" id="F" value="F" v-model="isColor" />F</label
       >
@@ -220,9 +233,97 @@
           v-model="isColor"
         />卡色</label
       >
+      <label for="chioton"
+        ><input
+          type="checkbox"
+          id="chioton"
+          value="焦糖"
+          v-model="isColor"
+        />焦糖</label
+      >
+      <label for="eanmin"
+        ><input
+          type="checkbox"
+          id="eanmin"
+          value="燕麥"
+          v-model="isColor"
+        />燕麥</label
+      >
+      <label for="naichio"
+        ><input
+          type="checkbox"
+          id="naichio"
+          value="奶茶"
+          v-model="isColor"
+        />奶茶</label
+      >
+      <label for="meser"
+        ><input
+          type="checkbox"
+          id="meser"
+          value="米色"
+          v-model="isColor"
+        />米色</label
+      >
+      <label for="naiser"
+        ><input
+          type="checkbox"
+          id="naiser"
+          value="奶色"
+          v-model="isColor"
+        />奶色</label
+      >
+      <label for="shonser"
+        ><input
+          type="checkbox"
+          id="shonser"
+          value="棕色"
+          v-model="isColor"
+        />棕色</label
+      >
+      <label for="salu"
+        ><input
+          type="checkbox"
+          id="salu"
+          value="沙綠"
+          v-model="isColor"
+        />沙綠</label
+      >
+      <label for="jonchin"
+        ><input
+          type="checkbox"
+          id="jonchin"
+          value="藏青"
+          v-model="isColor"
+        />藏青</label
+      >
+      <label for="dolu"
+        ><input
+          type="checkbox"
+          id="dolu"
+          value="豆綠"
+          v-model="isColor"
+        />豆綠</label
+      >
+      <label for="tiowon"
+        ><input
+          type="checkbox"
+          id="tiowon"
+          value="條紋"
+          v-model="isColor"
+        />條紋</label
+      >
+      <label for="naihuan"
+        ><input
+          type="checkbox"
+          id="naihuan"
+          value="奶黃"
+          v-model="isColor"
+        />奶黃</label
+      >
     </div>
-    <div class="size">
-      尺寸
+    <div class="size" style="margin-bottom: 15px">
+      尺寸:
       <label for="free"
         ><input type="checkbox" id="free" value="Free" v-model="isSize" />Free
         Size</label
@@ -240,8 +341,16 @@
         ><input type="checkbox" value="XL" id="xl" v-model="isSize" />XL</label
       >
     </div>
-    <button @click="goBack">取消</button>
-    <button @click="goSave">保存</button>
+    <button @click="goBack" style="background-color: #505050" class="goods_btn">
+      取消
+    </button>
+    <button
+      @click="goSave"
+      style="background-color: rgb(64, 169, 64)"
+      class="goods_btn"
+    >
+      保存
+    </button>
     <alert-window :isShow="isShowAlert" @editShow="editShow">
       <template v-slot:alertContent>
         <p>是否確定？確定後就不能再更改</p>
@@ -345,4 +454,39 @@ export default {
 </script>
 
 <style scoped>
+#Goods {
+  padding: 50px 20px;
+  color: #4a4a4a;
+  font-size: 18px;
+}
+.goods_edit_ipt {
+  margin-right: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  color: #4a4a4a;
+}
+
+label {
+  margin-right: 5px;
+}
+
+select {
+  width: 150px;
+  height: 30px;
+  padding: 1px 8px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  color: #4a4a4a;
+}
+
+.goods_btn {
+  width: 50px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+}
 </style>

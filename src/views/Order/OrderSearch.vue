@@ -31,7 +31,7 @@
 
     <!-- order_number start -->
     <div class="order_number_wrap">
-      <label for="order_number">廠商貨號:</label
+      <label for="order_number">廠商貨號：</label
       ><input type="text" id="order_number" v-model.trim="orderNumberModel" />
       <button @click="orderNumberBtn" class="order_number_btn">搜尋</button>
     </div>
@@ -39,7 +39,7 @@
 
     <!-- self_number start -->
     <div class="self_number_wrap">
-      <label for="self_number">商品貨號:</label
+      <label for="self_number">商品貨號：</label
       ><input type="text" id="self_number" v-model.trim="selfNumberModel" />
       <button @click="selfNumberBtn" class="self_number_btn">搜尋</button>
     </div>
@@ -211,6 +211,10 @@ export default {
 </script>
 
 <style scoped>
+#ordersearch_bar {
+  font-size: 16px;
+  color: #4a4a4a;
+}
 .ordersearch_status {
   display: flex;
   margin-bottom: 20px;
@@ -233,10 +237,35 @@ export default {
   margin-left: 20px;
   border: 0;
   width: 50px;
-  height: 25px;
+  height: 26px;
+  line-height: 24px;
   border-radius: 5px;
-  background: rgb(84, 170, 236);
+  background: #b78873;
   color: #fff;
   cursor: pointer;
+}
+
+.ordersearch_status .status_btn:hover,
+.shopeeAndPlaceOrderWrap .shopee_btn:hover,
+.order_number_wrap .order_number_btn:hover,
+.self_number_wrap .self_number_btn:hover {
+  opacity: 0.8;
+}
+
+input {
+  margin-right: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  color: #4a4a4a;
+}
+
+select {
+  width: 80px;
+  height: 30px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  color: #4a4a4a;
 }
 </style>

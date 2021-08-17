@@ -1,7 +1,6 @@
 <template>
   <div id="searchBar">
-    <input type="date" v-model="test" />
-    {{ test }}
+
   </div>
 </template>
 

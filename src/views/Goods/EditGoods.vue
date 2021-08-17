@@ -1,30 +1,38 @@
 <template>
-  <div>
-    <div class="goodsNum">廠商貨號:{{ goodsData.gNum }}</div>
-    <div class="goodsNum">商品貨號:{{ goodsData.selfNum }}</div>
-    <div class="goodsName">商品名稱:{{ goodsData.gName }}</div>
+  <div id="edit_goods">
+    <div class="goodsNum">廠商貨號: {{ goodsData.gNum }}</div>
+    <div class="goodsNum">商品貨號: {{ goodsData.selfNum }}</div>
+    <div class="goodsName">商品名稱: {{ goodsData.gName }}</div>
     <div class="price">
-      成本價(人民幣):<input
+      成本價(人民幣):
+      <input
         type="text"
         v-model="pGoods"
         disabled
         ref="nativePriceIpt"
-      /><button @click="pGoodsCheck" ref="nativePriceBtn">修改</button>
+        class="money_ipt"
+      /><button @click="pGoodsCheck" ref="nativePriceBtn" class="eidt_btn">
+        修改
+      </button>
     </div>
-    <div>成本價(台幣):{{ nativeNT }}</div>
-    <div>最低售價:{{ minimumPrice }}</div>
-    <div>建議售價:{{ bestPrice }}</div>
+    <div>成本價(台幣): {{ nativeNT }}</div>
+    <div>最低售價: {{ minimumPrice }}</div>
+    <div>建議售價: {{ bestPrice }}</div>
     <div class="final_price">
-      最後定價<input
+      最後定價:
+      <input
         type="text"
         v-model.number="finalPrice"
         ref="finalPriceIpt"
+        class="money_ipt"
         disabled
-      /><button @click="editFinalPrice" ref="editBtn">修改</button>
+      /><button @click="editFinalPrice" ref="editBtn" class="eidt_btn">
+        修改
+      </button>
     </div>
-    <div>檔期種類名稱:{{ goodsData.sort }}</div>
+    <div>檔期種類名稱: {{ goodsData.sort }}</div>
     <div class="goodsColor">
-      顏色
+      顏色:
       <label for="F"
         ><input
           type="checkbox"
@@ -195,9 +203,97 @@
           v-model="isColor"
         />卡色</label
       >
+      <label for="chioton"
+        ><input
+          type="checkbox"
+          id="chioton"
+          value="焦糖"
+          v-model="isColor"
+        />焦糖</label
+      >
+      <label for="eanmin"
+        ><input
+          type="checkbox"
+          id="eanmin"
+          value="燕麥"
+          v-model="isColor"
+        />燕麥</label
+      >
+      <label for="naichio"
+        ><input
+          type="checkbox"
+          id="naichio"
+          value="奶茶"
+          v-model="isColor"
+        />奶茶</label
+      >
+      <label for="meser"
+        ><input
+          type="checkbox"
+          id="meser"
+          value="米色"
+          v-model="isColor"
+        />米色</label
+      >
+      <label for="naiser"
+        ><input
+          type="checkbox"
+          id="naiser"
+          value="奶色"
+          v-model="isColor"
+        />奶色</label
+      >
+      <label for="shonser"
+        ><input
+          type="checkbox"
+          id="shonser"
+          value="棕色"
+          v-model="isColor"
+        />棕色</label
+      >
+      <label for="salu"
+        ><input
+          type="checkbox"
+          id="salu"
+          value="沙綠"
+          v-model="isColor"
+        />沙綠</label
+      >
+      <label for="jonchin"
+        ><input
+          type="checkbox"
+          id="jonchin"
+          value="藏青"
+          v-model="isColor"
+        />藏青</label
+      >
+      <label for="dolu"
+        ><input
+          type="checkbox"
+          id="dolu"
+          value="豆綠"
+          v-model="isColor"
+        />豆綠</label
+      >
+      <label for="tiowon"
+        ><input
+          type="checkbox"
+          id="tiowon"
+          value="條紋"
+          v-model="isColor"
+        />條紋</label
+      >
+      <label for="naihuan"
+        ><input
+          type="checkbox"
+          id="naihuan"
+          value="奶黃"
+          v-model="isColor"
+        />奶黃</label
+      >
     </div>
     <div class="size">
-      尺寸
+      尺寸:
       <label for="free"
         ><input type="checkbox" id="free" value="Free" v-model="isSize" />Free
         Size</label
@@ -215,10 +311,12 @@
         ><input type="checkbox" value="XL" id="xl" v-model="isSize" />XL</label
       >
     </div>
-    <div>創建時間：{{ goodsData.timer }}</div>
-    <button @click="goBack">取消</button>
-    <button @click="goChange">保存</button>
-    <button @click="checkDel">刪除</button>
+    <div>創建時間: {{ goodsData.timer }}</div>
+    <div class="goods_btn_wrap">
+      <button @click="goChange" class="goods_edit_btn">保存</button>
+      <button @click="goBack" class="goods_edit_btn">取消</button>
+      <button @click="checkDel" class="goods_edit_btn">刪除</button>
+    </div>
 
     <!-- 警視窗 -->
     <alert-window :isShow="isShow" @editShow="editShow">
@@ -257,6 +355,7 @@ export default {
     AlertWindow,
   },
   created() {
+    // this.$store.commit("setShowSideBar", false);
     this.iid = this.$route.query.iid;
     requestData(this.$route.query.iid, "goodslistDetail", "get")
       .then((res) => {
@@ -341,4 +440,60 @@ export default {
 </script>
 
 <style scoped>
+#edit_goods {
+  padding: 50px 20px;
+}
+
+#edit_goods > div {
+  margin-bottom: 20px;
+  color: #4a4a4a;
+  font-size: 18px;
+}
+label {
+  margin-right: 5px;
+}
+
+.goods_edit_btn {
+  width: 50px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+}
+
+.goods_edit_btn:nth-child(1) {
+  background-color: rgb(64, 169, 64);
+}
+
+.goods_edit_btn:nth-child(2) {
+  background-color: #505050;
+}
+
+.goods_edit_btn:nth-child(3) {
+  background-color: rgb(225, 54, 54);
+}
+
+.goods_btn_wrap {
+  margin-top: 40px;
+}
+
+.money_ipt {
+  margin-right: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  color: #4a4a4a;
+}
+
+.eidt_btn {
+  width: 50px;
+  height: 28px;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+  background-color: #505050;
+}
 </style>

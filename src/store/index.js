@@ -18,7 +18,7 @@ export default new Vuex.Store({
     },
     setPaginationStatus(state, payload) {
       state.paginationStatus = payload.status;
-    }
+    },
   },
   actions: {
   },

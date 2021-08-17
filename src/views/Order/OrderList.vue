@@ -1,7 +1,9 @@
 <template>
   <div id="order_list">
-    <button @click="goOrder">新增訂單</button>
-    <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
+    <div class="order_control_btn_wrap">
+      <button @click="goOrder">新增訂單</button>
+      <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
+    </div>
 
     <order-search
       @resFilter="resFilter"
@@ -27,6 +29,9 @@
             'page' + $store.state.paginationNative
           ]"
           :key="index"
+          :class="{ current_bgc: index === currentIndex }"
+          @mouseenter="enterItem(index)"
+          @mouseleave="leaveItem"
         >
           <div class="content_item list_item">
             {{ ($store.state.paginationNative - 1) * 20 + index + 1 }}
@@ -47,14 +52,23 @@
             <button
               @click="shippedBtnClick(item, index)"
               :disabled="item.orderCurryStatus === 'complete'"
+              class="order_curry_btn"
+              :class="{ current_opcity: item.orderCurryStatus === 'complete' }"
             >
               已出貨
             </button>
           </div>
 
           <div class="content_item">
-            <button @click="goEditOrder(item)" class="edit_btn">編輯</button>
-            <button @click="goRemoveOrder(item.orderNum)">刪除</button>
+            <button @click="goEditOrder(item)" class="edit_btn common_btn">
+              編輯
+            </button>
+            <button
+              @click="goRemoveOrder(item.orderNum)"
+              class="del_btn common_btn"
+            >
+              刪除
+            </button>
           </div>
           <div class="point_note" v-if="isShowNoteAlert(item)">!</div>
         </div>
@@ -72,10 +86,11 @@
             </span>
           </div>
         </div>
+        <div class="fack"></div>
       </div>
     </div>
     <div v-else>
-      <h2>查無訂單</h2>
+      <h2 style="color: #4a4a4a; margin: 20px 0px 0px 40px">查無訂單</h2>
     </div>
     <!-- 警視窗 -->
     <alert-window :isShow="isShow" @editShow="editShow">
@@ -122,6 +137,8 @@ export default {
       shippedItem: {},
       isIndex: null,
       deleteId: "",
+
+      currentIndex: 0,
     };
   },
   components: {
@@ -150,6 +167,14 @@ export default {
     // this.paginationNative = this.$store.state.paginationNative;
   },
   methods: {
+    enterItem(index) {
+      this.currentIndex = index;
+    },
+
+    leaveItem() {
+      this.currentIndex = "000";
+    },
+
     goOrder() {
       this.$router.push("/order");
     },
@@ -296,13 +321,17 @@ export default {
 
 <style scoped>
 #order_list {
+  position: relative;
   width: 1200px;
   margin: 0 auto;
+  color: #4a4a4a;
+  font-size: 16px;
 }
 .order_hd {
   display: flex;
   justify-content: space-around;
-  border-bottom: 2px solid #999999;
+  border-bottom: 2px solid #b78873;
+  color: #4a4a4a;
 }
 .order_hd > div {
   flex: 11.1%;
@@ -312,6 +341,10 @@ export default {
   line-height: 50px;
 }
 
+/* .order_bd {
+  margin-bottom: 50px;
+} */
+
 .order_bd .goods_item {
   position: relative;
   display: flex;
@@ -320,6 +353,15 @@ export default {
 .goods_item .content_item {
   flex: 11%;
   text-align: center;
+}
+
+.content_item > .common_btn {
+  width: 50px;
+  cursor: pointer;
+  height: 30px;
+  color: #fff;
+  border: 0;
+  border-radius: 5px;
 }
 
 .listItem_title,
@@ -338,21 +380,27 @@ export default {
 
 .goods_item {
   border-bottom: 1px solid #999999;
-  height: 50px;
+  height: 65px;
+  cursor: default;
 }
 
 .goods_item > div {
-  line-height: 49px;
+  line-height: 64px;
 }
 
 .edit_btn {
   margin-right: 10px;
+  background-color: #4a90e2;
+}
+
+.del_btn {
+  background-color: rgb(220 44 44);
 }
 
 .pagination_bar {
   display: flex;
   justify-content: flex-end;
-  margin: 20px 0 40px;
+  margin: 20px 10px 25px 0px;
 }
 
 .pagination_bar .pagination_wrap > span {
@@ -360,7 +408,8 @@ export default {
   width: 26px;
   height: 26px;
   margin: 0 5px;
-  border: 1px solid #999999;
+  border: 1px solid #b78873;
+  color: #b78873;
   border-radius: 13px;
   text-align: center;
   line-height: 26px;
@@ -368,20 +417,20 @@ export default {
 }
 
 .pagination_bar .pagination_wrap > span:hover {
-  background-color: #999999;
+  background-color: #b78873;
   color: #fff;
   opacity: 0.8;
 }
 
 .current_index {
-  background-color: #999999;
-  color: #fff;
+  background-color: #b78873;
+  color: #fff !important;
 }
 
 .point_note {
   position: absolute;
   top: 50%;
-  right: -10px;
+  right: -20px;
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
@@ -392,5 +441,56 @@ export default {
   font-weight: 700;
   color: #fff;
   background-color: rgb(255, 0, 0);
+}
+
+.order_control_btn_wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.order_control_btn_wrap > button {
+  width: 110px;
+  height: 30px;
+  margin-right: 50px;
+  color: #fff;
+  background: #b78873;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.order_control_btn_wrap > button:first-child {
+  margin-bottom: 20px;
+}
+
+.order_control_btn_wrap > button:hover {
+  opacity: 0.8;
+}
+
+.current_bgc {
+  background-color: #e4c7ba;
+}
+
+.order_curry_btn {
+  width: 60px;
+  height: 30px;
+  background-color: #343a40;
+  color: #fff;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.current_opcity {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.fack {
+  width: 100px;
+  height: 1px;
 }
 </style>

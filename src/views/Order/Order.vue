@@ -1,37 +1,55 @@
 <template>
   <div id="Order">
     <div class="order_hd">
-      <p>新建訂單</p>
-      <div>
+      <p class="create_order">新建訂單</p>
+      <div class="content_wrap">
         <!-- 訂單編號 -->
-        <div>訂單編號：{{ orderNum }}</div>
+        <div><label for="">訂單編號</label>{{ orderNum }}</div>
 
         <!-- 蝦皮訂單編號 -->
         <div>
-          蝦皮訂單編號：<input
+          <label for="shopee_account_ipt">蝦皮訂單編號</label
+          ><input
             type="text"
             v-model.trim="shopeeAccount"
             ref="shopeeIpt"
+            class="textipt"
+            id="shopee_account_ipt"
           />
-          <button @click="shopeeCheck" v-if="isShopeeShow">確定</button>
+          <button @click="shopeeCheck" v-if="isShopeeShow" class="confirm_btn">
+            確定
+          </button>
         </div>
 
         <!-- 買家帳號 -->
         <template v-if="buyerIsShow">
           <div>
-            買家帳號：<input type="text" v-model.trim="buyerAccount" />
-            <button @click="checkBuyerAccount">確定</button>
+            <label for="buyer_account_ipt">買家帳號</label
+            ><input
+              type="text"
+              v-model.trim="buyerAccount"
+              class="textipt"
+              id="buyer_account_ipt"
+            />
+            <button @click="checkBuyerAccount" class="confirm_btn">確定</button>
           </div>
         </template>
         <template v-else>
           <div>
-            買家帳號<input type="text" :value="buyerAccount" disabled />
+            <label>買家帳號</label
+            ><input
+              type="text"
+              :value="buyerAccount"
+              disabled
+              class="textipt"
+            />
           </div>
         </template>
 
         <div>
           <!-- 檔期 -->
-          檔期：<select @change="sortChange" v-model="sortBind">
+          <label>檔期</label
+          ><select @change="sortChange" v-model="sortBind" class="select_ipt">
             <option value="">請選擇</option>
             <option value="all">所有檔期</option>
             <template v-for="item in sortList">
@@ -43,14 +61,25 @@
         <!-- 商品貨號 -->
 
         <div>
-          商品貨號<input type="text" v-model="goodsNum" />
-          <span style="color: red"> *請輸入數字</span>
-          <button @click="searchGoods">確定</button>
+          <label for="goods_num_ipt">商品貨號</label
+          ><input
+            type="text"
+            v-model="goodsNum"
+            class="textipt"
+            id="goods_num_ipt"
+          />
+          <!-- <span style="color: red"> *請輸入數字</span> -->
+          <button @click="searchGoods" class="confirm_btn">確定</button>
         </div>
 
         <!-- 商品名稱 -->
         <div>
-          商品名稱：<select @change="goodsListChange" v-model="goodsListBind">
+          <label>商品名稱</label
+          ><select
+            @change="goodsListChange"
+            v-model="goodsListBind"
+            class="select_ipt"
+          >
             <option value="">請選擇</option>
             <template v-for="item in resGoodsList">
               <option :value="item.gNum">{{ item.gName }}</option>
@@ -60,7 +89,8 @@
 
         <!-- 顏色 -->
         <div>
-          顏色：<span v-for="item in resGoods.isColor" :key="item"
+          <label for="">顏色</label
+          ><span v-for="item in resGoods.isColor" :key="item"
             ><label :for="item"
               ><input
                 type="radio"
@@ -74,7 +104,8 @@
 
         <!-- 尺寸 -->
         <div>
-          尺寸：<span v-for="item in resGoods.isSize" :key="item"
+          <label for="">尺寸</label
+          ><span v-for="item in resGoods.isSize" :key="item"
             ><label :for="item"
               ><input
                 type="radio"
@@ -87,37 +118,51 @@
         </div>
 
         <!-- 數量 -->
-        <div>數量：<input type="text" v-model.number="orderCount" /></div>
+        <div>
+          <label for="order_count_ipt">數量</label
+          ><input
+            type="text"
+            v-model.number="orderCount"
+            class="textipt"
+            id="order_count_ipt"
+          />
+        </div>
 
         <!-- 最晚出貨日期 -->
         <div>
           <template v-if="lastShipIsShow">
-            最晚出貨日：<input type="date" v-model="lastShipment" /><button
-              @click="lastShipCheck"
-            >
-              確定
-            </button>
+            <label for="last_shipment_ipt">最晚出貨日</label
+            ><input
+              type="date"
+              v-model="lastShipment"
+              class="textipt"
+              id="last_shipment_ipt"
+            /><button @click="lastShipCheck" class="confirm_btn">確定</button>
           </template>
           <template v-else>
-            最晚出貨日：<input type="date" disabled :value="lastShipment" />
+            <label for="">最晚出貨日</label
+            ><input
+              type="date"
+              disabled
+              :value="lastShipment"
+              class="select_ipt"
+            />
           </template>
-          {{ lastShipment }}
         </div>
 
         <!-- 備註 -->
         <div>
-          <div>備註：</div>
+          <div style="margin-bottom: 10px">備註</div>
           <textarea
-            name=""
-            id=""
             cols="30"
             rows="10"
+            class="order_note_text"
             v-model="orderNote"
           ></textarea>
         </div>
 
         <!-- 加入訂單 -->
-        <button @click="addToOrder">加入訂單</button>
+        <button @click="addToOrder" class="join_order">加入訂單</button>
       </div>
     </div>
 
@@ -137,6 +182,9 @@
           class="order_list"
           v-for="(item, index) in saveOrder.orderList"
           :key="`item${index}`"
+          :class="{ current_bgc: index === currentIndex }"
+          @mouseenter="enterItem(index)"
+          @mouseleave="leaveItem"
         >
           <div>
             <span>{{ item.orderName }}</span>
@@ -157,12 +205,16 @@
             <span>{{ item.finalPrice }}</span>
           </div>
           <div>
-            <button @click="orderItemRemove(item)">移除</button>
+            <button @click="orderItemRemove(item)" class="remove_orderlist_btn">
+              移除
+            </button>
           </div>
         </div>
       </div>
       <div v-else class="list_content">
-        <p class="noneList">尚未有商品加入此筆訂單中</p>
+        <p class="noneList" style="margin-top: 10px">
+          尚未有商品加入此筆訂單中
+        </p>
       </div>
     </div>
 
@@ -170,7 +222,7 @@
     <h2 class="computedCountPrice">訂單總金額：{{ countPrice }}</h2>
 
     <!-- 提交訂單 -->
-    <button @click="submitOrder">提交訂單</button>
+    <button @click="submitOrder" class="commit_order_btn">提交訂單</button>
 
     <alert-window>
       <template v-slot:alertContent>
@@ -191,6 +243,7 @@ import dayjs from "dayjs";
 export default {
   data() {
     return {
+      currentIndex: null,
       // created 第一次獲取的數據
       sortList: [],
       goodsList: [],
@@ -388,6 +441,14 @@ export default {
       this.$refs.shopeeIpt.disabled = true;
       this.saveOrder.shopeeAccount = this.shopeeAccount;
     },
+
+    enterItem(index) {
+      this.currentIndex = index;
+    },
+
+    leaveItem() {
+      this.currentIndex = "000";
+    },
   },
   computed: {
     countPrice() {
@@ -405,16 +466,31 @@ export default {
 <style scoped>
 #Order {
   padding: 50px 40px;
+  font-size: 18px;
+  color: #4a4a4a;
+  background-color: #f9f9f9;
 }
+
+.create_order {
+  margin-bottom: 30px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
 .order_bd {
-  margin-top: 50px;
+  margin-top: 80px;
+}
+
+.content_wrap > div {
+  margin-bottom: 20px;
 }
 
 .title {
   display: flex;
   justify-content: space-around;
   padding-bottom: 10px;
-  border-bottom: 2px solid #505050;
+  border-bottom: 2px solid #b78873;
+  color: #4a4a4a;
 }
 .title span {
   flex: 14.2%;
@@ -426,8 +502,10 @@ export default {
 
 .order_list {
   display: flex;
+  height: 80px;
   justify-content: space-around;
   border-bottom: 1px solid #999999;
+  cursor: default;
 }
 .order_list div {
   display: flex;
@@ -445,12 +523,112 @@ export default {
   -webkit-box-orient: vertical;
 }
 
-.list_content {
+/* .list_content {
   margin-top: 10px;
-}
+} */
 .noneList {
   text-align: center;
   font-size: 30px;
   font-weight: 700;
+}
+
+.textipt {
+  width: 208px;
+  margin-right: 10px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  color: #4a4a4a;
+}
+
+.select_ipt {
+  width: 208px;
+  height: 30px;
+  padding: 1px 8px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  color: #4a4a4a;
+}
+
+.confirm_btn {
+  width: 50px;
+  height: 30px;
+  margin-left: 15px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+  background-color: #505050;
+  cursor: pointer;
+}
+
+.confirm_btn:hover {
+  opacity: 0.8;
+}
+
+label {
+  display: inline-block;
+  width: 130px;
+}
+
+.order_note_text {
+  width: 337px;
+  padding: 5px 8px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  color: #4a4a4a;
+}
+
+.join_order {
+  width: 100px;
+  height: 30px;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+  background-color: #505050;
+  cursor: pointer;
+}
+
+.join_order:hover {
+  opacity: 0.8;
+}
+
+.computedCountPrice {
+  margin-top: 80px;
+}
+
+.current_bgc {
+  background-color: #e4c7ba;
+  /* border-bottom: 1px solid #e4c7ba; */
+}
+
+.remove_orderlist_btn {
+  width: 50px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+  background-color: rgb(225, 54, 54);
+}
+
+.commit_order_btn {
+  width: 100px;
+  height: 30px;
+  margin-top: 30px;
+  background-color: rgb(64, 169, 64);
+  color: #fff;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+.commit_order_btn:hover {
+  opacity: 0.8;
 }
 </style>

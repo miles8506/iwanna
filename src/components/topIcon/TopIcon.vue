@@ -33,8 +33,8 @@ export default {
 .top_icon {
   display: none;
   position: fixed;
-  bottom: 50px;
-  right: 50px;
+  bottom: 15px;
+  right: 5px;
   width: 40px;
   height: 40px;
   border-radius: 40px;
