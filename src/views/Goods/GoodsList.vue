@@ -24,6 +24,7 @@
       <div>顏色</div>
       <div>尺寸</div>
       <div>成本</div>
+      <div>售價</div>
       <div>操作</div>
     </div>
     <div class="goods_bd">
@@ -54,6 +55,7 @@
             </template>
           </span>
           <span>{{ item.pGoods }}</span>
+          <span>{{ item.finalPrice }}</span>
           <span
             ><button @click="goEditGoods(item.gNum)" class="control_btn">
               操作
