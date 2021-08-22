@@ -409,7 +409,7 @@ export default {
       this.isShow = !this.isShow;
       requestData(this.iid, "goodsDel", "delete").then((res) => {
         if (res == 0) window.alert(`${this.goodsData.gName}商品已成功刪除`);
-        this.$router.go(-1);
+        this.$router.push("/goodsList");
       });
     },
     editShow() {

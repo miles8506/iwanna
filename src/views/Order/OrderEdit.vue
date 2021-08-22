@@ -21,7 +21,7 @@
         :key="index"
       >
         <div>
-          <label for="curryStatusIpt"
+          <label :for="'curryStatusIpt' + index"
             >出貨狀態:<input
               type="checkbox"
               @change="statusChange(item)"
@@ -29,7 +29,7 @@
               :disabled="
                 item.status === 'complete' || orderGoods.placeOrder === false
               "
-              id="curryStatusIpt"
+              :id="'curryStatusIpt' + index"
           /></label>
         </div>
         <div>商品名稱:{{ item.orderName }}</div>
