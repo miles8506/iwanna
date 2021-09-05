@@ -3,6 +3,9 @@
     <div class="order_control_btn_wrap">
       <button @click="goOrder">新增訂單</button>
       <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
+      <button style="margin-top: 20px" @click="goOrderDetail">
+        所有訂單詳情
+      </button>
     </div>
 
     <order-search
@@ -314,6 +317,11 @@ export default {
         return item.orderNote !== "";
       });
       return flag;
+    },
+
+    // 前往orderDetail page
+    goOrderDetail() {
+      this.$router.push("/orderDetail");
     },
   },
 };

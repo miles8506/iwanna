@@ -6,6 +6,7 @@ const Order = () => import('views/Order/Order.vue');
 const OrderList = () => import('views/Order/OrderList.vue');
 const OrderPlace = () => import('views/Order/OrderPlace.vue');
 const EditOrder = () => import('views/Order/OrderEdit.vue');
+const OrderDetail = () => import('views/Order/OrderDetail.vue');
 const GoodsList = () => import('views/Goods/GoodsList.vue');
 const CreateGoods = () => import('views/Goods/CreateGoods.vue');
 const SortList = () => import('views/Sort/SortList.vue');
@@ -44,6 +45,10 @@ const routes = [
   {
     path: '/editOrder/:iid',
     component: EditOrder
+  },
+  {
+    path: '/orderDetail',
+    component: OrderDetail
   },
   {
     path: '/goodsList',

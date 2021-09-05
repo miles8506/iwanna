@@ -2,7 +2,7 @@
   <div id="orderEdit">
     <div class="main_order">
       <h2>訂單主要資料</h2>
-      <div>訂單名稱:{{ orderGoods.orderNum }}</div>
+      <div>訂單編號:{{ orderGoods.shopeeAccount }}</div>
       <div>買家帳號:{{ orderGoods.buyerAccount }}</div>
       <div>最晚出貨時間:{{ lastShip }}</div>
       <div>訂單總金額:{{ orderGoods.orderTotal }}</div>
