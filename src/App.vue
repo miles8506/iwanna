@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="content">
-        <keep-alive include="OrderList">
+        <keep-alive include="OrderList,GoodsList">
           <router-view></router-view>
         </keep-alive>
         <top-icon />

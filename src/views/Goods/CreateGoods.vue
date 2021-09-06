@@ -321,6 +321,38 @@
           v-model="isColor"
         />奶黃</label
       >
+      <label for="shangreen"
+        ><input
+          type="checkbox"
+          id="shangreen"
+          value="鹹菜綠"
+          v-model="isColor"
+        />鹹菜綠</label
+      >
+      <label for="chaiolu"
+        ><input
+          type="checkbox"
+          id="chaiolu"
+          value="草綠"
+          v-model="isColor"
+        />草綠</label
+      >
+      <label for="oufan"
+        ><input
+          type="checkbox"
+          id="oufan"
+          value="藕粉"
+          v-model="isColor"
+        />藕粉</label
+      >
+      <label for="deepblue"
+        ><input
+          type="checkbox"
+          id="deepblue"
+          value="深藍"
+          v-model="isColor"
+        />深藍</label
+      >
     </div>
     <div class="size" style="margin-bottom: 15px">
       尺寸:

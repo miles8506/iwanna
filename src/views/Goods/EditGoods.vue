@@ -291,6 +291,38 @@
           v-model="isColor"
         />奶黃</label
       >
+      <label for="shangreen"
+        ><input
+          type="checkbox"
+          id="shangreen"
+          value="鹹菜綠"
+          v-model="isColor"
+        />鹹菜綠</label
+      >
+      <label for="chaiolu"
+        ><input
+          type="checkbox"
+          id="chaiolu"
+          value="草綠"
+          v-model="isColor"
+        />草綠</label
+      >
+      <label for="oufan"
+        ><input
+          type="checkbox"
+          id="oufan"
+          value="藕粉"
+          v-model="isColor"
+        />藕粉</label
+      >
+      <label for="deepblue"
+        ><input
+          type="checkbox"
+          id="deepblue"
+          value="深藍"
+          v-model="isColor"
+        />深藍</label
+      >
     </div>
     <div class="size">
       尺寸:
@@ -396,11 +428,13 @@ export default {
       data.finalPrice = this.finalPrice;
       requestData(JSON.stringify(data), "goodsChange", "post").then((res) => {
         window.alert("商品已修改");
-        this.$router.go(-1);
+        // this.$router.go(-1);
+        this.$router.push("/goodsList");
       });
     },
     goBack() {
-      this.$router.go(-1);
+      // this.$router.go(-1);
+      this.$router.push("/goodsList");
     },
     checkDel() {
       this.isShow = !this.isShow;
@@ -409,6 +443,7 @@ export default {
       this.isShow = !this.isShow;
       requestData(this.iid, "goodsDel", "delete").then((res) => {
         if (res == 0) window.alert(`${this.goodsData.gName}商品已成功刪除`);
+        // this.$router.go(-1);
         this.$router.push("/goodsList");
       });
     },

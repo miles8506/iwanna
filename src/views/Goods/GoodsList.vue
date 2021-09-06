@@ -7,8 +7,8 @@
           @change="changeSort"
           class="choice_select"
         >
-          <option value="">請選擇</option>
-          <option value="all">所有檔期</option>
+          <!-- <option value="">請選擇</option> -->
+          <option value="">所有檔期</option>
           <template v-for="item in sortList">
             <option :value="item.sort">{{ item.sort }}</option>
           </template>
@@ -74,6 +74,7 @@
 import { requestData, requestAll } from "network/request.js";
 import requestDataSort from "network/requestSort.js";
 export default {
+  name: "GoodsList",
   data() {
     return {
       dataList: [],
@@ -82,24 +83,88 @@ export default {
       currentIndex: null,
     };
   },
-  created() {
-    //goodslist
-    requestData(null, "goodsList", "get")
-      .then((res) => {
-        this.dataList = res;
-      })
-      .catch((err) => {
-        console.log(`err:${err}`);
-      });
+  // created() {
+  //   console.log("created");
+  //   //goodslist
+  //   requestData(null, "goodsList", "get")
+  //     .then((res) => {
+  //       this.dataList = res;
+  //     })
+  //     .catch((err) => {
+  //       console.log(`err:${err}`);
+  //     });
 
-    //sort
-    requestDataSort(null, "sortList", "get")
-      .then((res) => {
-        this.sortList = res;
-      })
-      .catch((err) => {
-        console.log(`錯誤${err}`);
-      });
+  //   //sort
+  //   requestDataSort(null, "sortList", "get")
+  //     .then((res) => {
+  //       this.sortList = res;
+  //     })
+  //     .catch((err) => {
+  //       console.log(`錯誤${err}`);
+  //     });
+  // },
+  // created() {
+  //   console.log("created");
+  //   requestDataSort(null, "sortList", "get")
+  //     .then((res) => {
+  //       this.sortList = res;
+  //     })
+  //     .catch((err) => {
+  //       console.log(`錯誤${err}`);
+  //     });
+  // },
+  activated() {
+    window.scrollTo(0, this.$store.state.goodsListHeight);
+
+    // //sort
+    // requestDataSort(null, "sortList", "get")
+    //   .then((res) => {
+    //     this.sortList = res;
+    //   })
+    //   .catch((err) => {
+    //     console.log(`錯誤${err}`);
+    //   });
+
+    // //goodslist
+    // requestData(null, "goodsList", "get")
+    //   .then((res) => {
+    //     this.dataList = res;
+    //   })
+    //   .catch((err) => {
+    //     console.log(`err:${err}`);
+    //   });
+
+    if (this.sortClass == "") {
+      requestData(null, "goodsList", "get")
+        .then((res) => {
+          this.dataList = res;
+        })
+        .catch((err) => {
+          alert(err);
+        });
+      requestDataSort(null, "sortList", "get")
+        .then((res) => {
+          this.sortList = res;
+        })
+        .catch((err) => {
+          console.log(`錯誤${err}`);
+        });
+    } else {
+      requestData(this.sortClass, "goodslistSort", "get")
+        .then((res) => {
+          this.dataList = res;
+        })
+        .catch((err) => {
+          console.log(`err:${err}`);
+        });
+      requestDataSort(null, "sortList", "get")
+        .then((res) => {
+          this.sortList = res;
+        })
+        .catch((err) => {
+          console.log(`錯誤${err}`);
+        });
+    }
   },
   methods: {
     enterItem(index) {
@@ -114,6 +179,7 @@ export default {
       this.$router.push("/CreateGoods");
     },
     goEditGoods(iid) {
+      this.$store.commit("setGoodsListHeight", { height: window.pageYOffset });
       this.$router.push({
         path: "/editGoods",
         query: {
@@ -123,8 +189,6 @@ export default {
     },
     changeSort() {
       if (this.sortClass == "") {
-        return;
-      } else if (this.sortClass == "all") {
         requestData(null, "goodsList", "get").then((res) => {
           this.dataList = res;
         });
