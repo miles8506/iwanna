@@ -71,6 +71,8 @@ export default {
           result.orderCount += goodListItem.orderCount;
         }
       });
+      // 廠商貨號 由小到大
+      this.orderPlaceList.sort((a, b) => a.ordergNum - b.ordergNum);
     });
   },
   methods: {
