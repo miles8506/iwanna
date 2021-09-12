@@ -353,6 +353,22 @@
           v-model="isColor"
         />深藍</label
       >
+      <label for="naisee"
+        ><input
+          type="checkbox"
+          id="naisee"
+          value="奶昔"
+          v-model="isColor"
+        />奶昔</label
+      >
+      <label for="mebai"
+        ><input
+          type="checkbox"
+          id="mebai"
+          value="米白"
+          v-model="isColor"
+        />米白</label
+      >
     </div>
     <div class="size" style="margin-bottom: 15px">
       尺寸:
@@ -371,6 +387,54 @@
       >
       <label for="xl"
         ><input type="checkbox" value="XL" id="xl" v-model="isSize" />XL</label
+      >
+      <label for="thirtyfive"
+        ><input
+          type="checkbox"
+          value="35"
+          id="thirtyfive"
+          v-model="isSize"
+        />35</label
+      >
+      <label for="thirtysix"
+        ><input
+          type="checkbox"
+          value="36"
+          id="thirtysix"
+          v-model="isSize"
+        />36</label
+      >
+      <label for="thirtyseven"
+        ><input
+          type="checkbox"
+          value="37"
+          id="thirtyseven"
+          v-model="isSize"
+        />37</label
+      >
+      <label for="thirtyeight"
+        ><input
+          type="checkbox"
+          value="38"
+          id="thirtyeight"
+          v-model="isSize"
+        />38</label
+      >
+      <label for="thirtynine"
+        ><input
+          type="checkbox"
+          value="39"
+          id="thirtynine"
+          v-model="isSize"
+        />39</label
+      >
+      <label for="forty"
+        ><input
+          type="checkbox"
+          value="40"
+          id="forty"
+          v-model="isSize"
+        />40</label
       >
     </div>
     <button @click="goBack" style="background-color: #505050" class="goods_btn">
