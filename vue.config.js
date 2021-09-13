@@ -6,6 +6,7 @@ module.exports = {
     ? '/iwanna/'
     : '/',
 
+
   chainWebpack: config => {
     config.resolve.alias.set('@', resolve('src'))
       .set('components', resolve('src/components'))
