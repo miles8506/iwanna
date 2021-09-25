@@ -339,6 +339,22 @@
           v-model="isColor"
         />米白</label
       >
+      <label for="tuaoser"
+        ><input
+          type="checkbox"
+          id="tuaoser"
+          value="駝色"
+          v-model="isColor"
+        />駝色</label
+      >
+      <label for="buaoheser"
+        ><input
+          type="checkbox"
+          id="buaoheser"
+          value="薄荷色"
+          v-model="isColor"
+        />薄荷色</label
+      >
     </div>
     <div class="size">
       尺寸:
@@ -560,6 +576,7 @@ label {
   border: 0;
   color: #fff;
   font-size: 16px;
+  cursor: pointer;
 }
 
 .goods_edit_btn:nth-child(1) {
