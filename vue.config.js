@@ -23,6 +23,9 @@ module.exports = {
         'window.jQuery': 'jquery',
         Popper: ['popper.js', 'default']
       })
-    ]
+    ],
+    externals: {
+      './cptable': 'var cptable'
+    }
   },
 };

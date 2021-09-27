@@ -1,6 +1,7 @@
 <template>
   <div id="order_list">
     <h2 class="title">待叫貨清單列表</h2>
+    <button class="excel_btn" @click="exportExcelBtn">export excel</button>
     <div class="orderPlace_hd">
       <div>廠商貨號</div>
       <div>商品顏色</div>
@@ -42,10 +43,15 @@
 <script>
 import { requestData } from "network/request.js";
 
+// excel
+import XLSX from "xlsx";
+import export2Excel from "../../assets/js/export2Excel";
+
 export default {
   data() {
     return {
       orderPlaceList: [],
+      excelDataList: [],
     };
   },
   created() {
@@ -79,6 +85,26 @@ export default {
     nativePriceNT(n_price, count) {
       const res = Math.ceil((parseInt(n_price) + 5) * 4.35);
       return res * count;
+    },
+
+    // excel btn
+    exportExcelBtn() {
+      if (this.orderPlaceList.length == 0) return alert("待貨清單為空");
+      this.excelDataList = [];
+      this.excelDataList.push(["_月_日"]);
+      this.orderPlaceList.forEach((item) => {
+        this.excelDataList.push([
+          `${item.ordergNum} ${item.orderSize} ${item.orderColor}*${item.orderCount}`,
+        ]);
+      });
+      let worksheet1 = XLSX.utils.aoa_to_sheet(this.excelDataList);
+      export2Excel({
+        worksheets: {
+          sheet1: worksheet1,
+        }, // 导出excel的数据，key表示工作表名，value表示对应工作表的 sheet 数据，支持导出多个工作表
+        fileName: "iwanna代叫貨清單列表", // 导出文件名
+        type: "xlsx", // 文件导出类型
+      });
     },
   },
   computed: {
@@ -154,5 +180,20 @@ export default {
 }
 .totalWrap h2:nth-child(1) {
   margin-bottom: 10px;
+}
+
+.excel_btn {
+  height: 30px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+  color: #fff;
+  background-color: #23272b;
+  border-color: #1d2124;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.excel_btn:hover {
+  opacity: 0.8;
 }
 </style>
