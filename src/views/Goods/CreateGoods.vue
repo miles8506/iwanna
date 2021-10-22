@@ -386,8 +386,6 @@
           v-model="isColor"
         />薄荷色</label
       >
-
-
       <label for="hualuser"
         ><input
           type="checkbox"

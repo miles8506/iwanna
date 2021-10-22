@@ -4,8 +4,8 @@
     <button class="excel_btn" @click="exportExcelBtn">export excel</button>
     <div class="orderPlace_hd">
       <div>廠商貨號</div>
-      <div>商品顏色</div>
       <div>商品尺寸</div>
+      <div>商品顏色</div>
       <div>商品數量</div>
       <div>商品成本</div>
       <div>商品名稱</div>
@@ -20,8 +20,8 @@
           class="orderPlaceItem"
         >
           <span>{{ item.ordergNum }}</span>
-          <span>{{ item.orderColor }}</span>
           <span>{{ item.orderSize }}</span>
+          <span>{{ item.orderColor }}</span>
           <span>{{ item.orderCount }}</span>
           <span>${{ item.pGoods * item.orderCount }}</span>
           <span>{{ item.orderName }}</span>
