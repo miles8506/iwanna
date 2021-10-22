@@ -355,6 +355,73 @@
           v-model="isColor"
         />薄荷色</label
       >
+
+
+
+      <label for="hualuser"
+        ><input
+          type="checkbox"
+          id="hualuser"
+          value="灰綠色"
+          v-model="isColor"
+        />灰綠色</label
+      >
+      <label for="simazi"
+        ><input
+          type="checkbox"
+          id="simazi"
+          value="西梅子"
+          v-model="isColor"
+        />西梅子</label
+      >
+      <label for="curcurser"
+        ><input
+          type="checkbox"
+          id="curcurser"
+          value="可可色"
+          v-model="isColor"
+        />可可色</label
+      >
+      <label for="pingoalu"
+        ><input
+          type="checkbox"
+          id="pingoalu"
+          value="蘋果綠"
+          v-model="isColor"
+        />蘋果綠</label
+      >
+      <label for="doalu"
+        ><input
+          type="checkbox"
+          id="doalu"
+          value="稻綠"
+          v-model="isColor"
+        />稻綠</label
+      >
+      <label for="hualu"
+        ><input
+          type="checkbox"
+          id="hualu"
+          value="灰綠"
+          v-model="isColor"
+        />灰綠</label
+      >
+      <label for="mihua"
+        ><input
+          type="checkbox"
+          id="mihua"
+          value="麥灰"
+          v-model="isColor"
+        />麥灰</label
+      >
+      <label for="fuser"
+        ><input
+          type="checkbox"
+          id="fuser"
+          value="膚色"
+          v-model="isColor"
+        />膚色</label
+      >
     </div>
     <div class="size">
       尺寸:

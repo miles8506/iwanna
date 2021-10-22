@@ -6,7 +6,6 @@ module.exports = {
     ? '/iwanna/'
     : '/',
 
-
   chainWebpack: config => {
     config.resolve.alias.set('@', resolve('src'))
       .set('components', resolve('src/components'))
@@ -28,4 +27,8 @@ module.exports = {
       './cptable': 'var cptable'
     }
   },
+  devServer: {
+    hot: false,
+    liveReload: false
+  }
 };
