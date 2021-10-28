@@ -47,12 +47,21 @@
 
     <!-- shopee start -->
     <div class="shopeeAndPlaceOrderWrap">
-      蝦皮/IG訂單帳號查詢：<input
+      蝦皮訂單號：<input
         type="text"
         v-model.trim="shopeeAccout"
       /><button @click="shopeeAccountSearch" class="shopee_btn">搜尋</button>
     </div>
     <!-- shopee end -->
+
+    <!-- user account start -->
+    <div class="user_account_wrap">
+      <label for="user_account_ipt">買家帳號：</label>
+      <input type="text" id="user_account_ipt" 
+      v-model.trim="userAccountModel">
+      <button @click="userAccountSearch" class="user_btn">搜尋</button>
+    </div>
+    <!-- user account end -->
   </div>
 </template>
 
@@ -69,9 +78,9 @@ export default {
       placeOrderStatus: "",
       curryTimer: "",
       shopeeAccout: "",
-
       orderNumberModel: "",
       selfNumberModel: "",
+      userAccountModel: ""
     };
   },
   mounted() {
@@ -101,6 +110,7 @@ export default {
           this.shopeeAccout = "";
           this.orderNumberModel = "";
           this.selfNumberModel = "";
+          this.userAccountModel = "";
           let curryStateFilter = [];
           if (this.curryStatus !== "") {
             curryStateFilter = res.filter(
@@ -147,6 +157,7 @@ export default {
         .then((res) => {
           this.selfNumberModel = "";
           this.shopeeAccout = "";
+          this.userAccountModel = "";
           res.forEach((item) => {
             const resSome = item.orderList.some(
               (item) => item.ordergNum == this.orderNumberModel
@@ -172,6 +183,7 @@ export default {
         .then((res) => {
           this.orderNumberModel = "";
           this.shopeeAccout = "";
+          this.userAccountModel = "";
           res.forEach((item) => {
             const resSome = item.orderList.some(
               (item) => item.orderSelfNum == this.selfNumberModel
@@ -196,6 +208,7 @@ export default {
         .then((res) => {
           this.orderNumberModel = "";
           this.selfNumberModel = "";
+          this.userAccountModel = "";
           const findObj = res.find(
             (item) => item.shopeeAccount == this.shopeeAccout
           );
@@ -206,6 +219,23 @@ export default {
           console.log(`err${err}`);
         });
     },
+
+    // 搜尋user帳號
+    userAccountSearch() {
+      if(this.userAccountModel == "")  return alert('請輸入買家帳號');
+      requestData(null, "orderList", "get")
+        .then(res => {
+          this.orderNumberModel = "";
+          this.selfNumberModel = "";
+          this.shopeeAccout = "";
+          const filterRes =  res.filter(item => item.buyerAccount == this.userAccountModel);
+          if (filterRes.length <= 0) return alert('查無買家帳號');
+          this.$emit('resFilter', filterRes);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
 };
 </script>
@@ -233,7 +263,8 @@ export default {
 .ordersearch_status .status_btn,
 .shopeeAndPlaceOrderWrap .shopee_btn,
 .order_number_wrap .order_number_btn,
-.self_number_wrap .self_number_btn {
+.self_number_wrap .self_number_btn,
+.user_account_wrap .user_btn {
   margin-left: 20px;
   border: 0;
   width: 50px;
@@ -248,7 +279,8 @@ export default {
 .ordersearch_status .status_btn:hover,
 .shopeeAndPlaceOrderWrap .shopee_btn:hover,
 .order_number_wrap .order_number_btn:hover,
-.self_number_wrap .self_number_btn:hover {
+.self_number_wrap .self_number_btn:hover,
+.user_account_wrap .user_btn:hover {
   opacity: 0.8;
 }
 

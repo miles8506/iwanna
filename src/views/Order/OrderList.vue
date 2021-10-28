@@ -2,7 +2,7 @@
   <div id="order_list">
     <div class="order_control_btn_wrap">
       <button @click="goOrder">新增訂單</button>
-      <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
+      <button class="placeOrderBtn" @click="goPlaceOrderBtn">待叫貨清單</button>
       <button style="margin-top: 20px" @click="goOrderDetail">
         所有訂單詳情
       </button>
