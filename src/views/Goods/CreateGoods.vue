@@ -450,6 +450,14 @@
           v-model="isColor"
         />膚色</label
       >
+      <label for="nanguaser"
+        ><input
+          type="checkbox"
+          id="nanguaser"
+          value="南瓜色"
+          v-model="isColor"
+        />南瓜色</label
+      >
     </div>
     <div class="size" style="margin-bottom: 15px">
       尺寸:
@@ -468,6 +476,9 @@
       >
       <label for="xl"
         ><input type="checkbox" value="XL" id="xl" v-model="isSize" />XL</label
+      >
+      <label for="xll"
+        ><input type="checkbox" value="XLL" id="xll" v-model="isSize" />XLL</label
       >
       <label for="thirtyfive"
         ><input

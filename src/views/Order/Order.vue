@@ -53,7 +53,7 @@
             <option value="">請選擇</option>
             <option value="all">所有檔期</option>
             <template v-for="item in sortList">
-              <option :value="item.sort">{{ item.sort }}</option>
+              <option :value="item.sort" :key="item.sort">{{ item.sort }}</option>
             </template>
           </select>
         </div>
@@ -82,7 +82,7 @@
           >
             <option value="">請選擇</option>
             <template v-for="item in resGoodsList">
-              <option :value="item.gNum">{{ item.gName }}</option>
+              <option :value="item.gNum" :key="item.gNum">{{ item.gName }}</option>
             </template>
           </select>
         </div>
