@@ -2,6 +2,7 @@
   <div id="orderEdit">
     <div class="main_order">
       <h2>訂單主要資料</h2>
+      <div>訂單創建時間:{{ createOrderTime }}</div>
       <div>訂單編號:{{ orderGoods.shopeeAccount }}</div>
       <div>買家帳號:{{ orderGoods.buyerAccount }}</div>
       <div>最晚出貨時間:{{ lastShip }}</div>
@@ -169,6 +170,10 @@ export default {
       const timer = this.orderGoods.lastShipment;
       return dayjs(timer).format("YYYY/MM/DD");
     },
+    createOrderTime() {
+      const timer = this.orderGoods.orderNum;
+      return dayjs(timer).format('YYYY/MM/DD HH:mm:ss');
+    }
   },
 };
 </script>

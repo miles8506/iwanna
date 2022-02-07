@@ -1,7 +1,7 @@
 <template>
   <div id="order_detail">
     <button @click="goOrderList">返回訂單列表</button>
-    <h2>訂單收益總金額:{{total}}</h2></h2>
+    <h2>訂單收益總金額:{{total}}</h2>
   </div>
 </template>
 

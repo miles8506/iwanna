@@ -3,6 +3,7 @@
     <h2 class="title">待叫貨清單列表</h2>
     <button class="excel_btn" @click="exportExcelBtn">export excel</button>
     <div class="orderPlace_hd">
+      <div>序號</div>
       <div>廠商貨號</div>
       <div>商品尺寸</div>
       <div>商品顏色</div>
@@ -19,6 +20,7 @@
           :key="index"
           class="orderPlaceItem"
         >
+          <span>{{ index+1 }}</span>
           <span>{{ item.ordergNum }}</span>
           <span>{{ item.orderSize }}</span>
           <span>{{ item.orderColor }}</span>
