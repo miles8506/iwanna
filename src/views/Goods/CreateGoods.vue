@@ -458,6 +458,30 @@
           v-model="isColor"
         />南瓜色</label
       >
+      <label for="naibye"
+        ><input
+          type="checkbox"
+          id="naibye"
+          value="奶白"
+          v-model="isColor"
+        />奶白</label
+      >
+      <label for="hamegua"
+        ><input
+          type="checkbox"
+          id="hamegua"
+          value="哈密瓜"
+          v-model="isColor"
+        />哈密瓜</label
+      >
+      <label for="mahung"
+        ><input
+          type="checkbox"
+          id="mahung"
+          value="玫紅"
+          v-model="isColor"
+        />玫紅</label
+      >
     </div>
     <div class="size" style="margin-bottom: 15px">
       尺寸:
