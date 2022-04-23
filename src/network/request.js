@@ -2,7 +2,7 @@
 export function requestData(goodsInfo = null, baseURL, types) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `http://127.0.0.1:5000/${baseURL}`,
+      url: `http://127.0.0.1:5050/${baseURL}`,
       type: types,
       data: {
         goodsInfo
@@ -21,7 +21,7 @@ export function requestAll(baseURL1, types1, baseURL2, types2) {
   return Promise.all([
     new Promise((resolve, reject) => {
       $.ajax({
-        url: `http://127.0.0.1:5000/${baseURL1}`,
+        url: `http://127.0.0.1:5050/${baseURL1}`,
         type: types1,
         success(res) {
           resolve(res)
@@ -33,7 +33,7 @@ export function requestAll(baseURL1, types1, baseURL2, types2) {
     }),
     new Promise((resolve, reject) => {
       $.ajax({
-        url: `http://127.0.0.1:5000/${baseURL2}`,
+        url: `http://127.0.0.1:5050/${baseURL2}`,
         type: types2,
         success(res) {
           resolve(res)
