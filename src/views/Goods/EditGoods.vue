@@ -451,6 +451,39 @@
           v-model="isColor"
         />玫紅</label
       >
+      <label for="calu"
+        ><input
+          type="checkbox"
+          id="calu"
+          value="卡綠"
+          v-model="isColor"
+        />卡綠</label
+      >
+      <label for="ju"
+        ><input
+          type="checkbox"
+          id="ju"
+          value="橘"
+          v-model="isColor"
+        />橘</label
+      >
+      <label for="fanju"
+        ><input
+          type="checkbox"
+          id="fanju"
+          value="粉橘"
+          v-model="isColor"
+        />粉橘</label
+      >
+      <label for="moca"
+        ><input
+          type="checkbox"
+          id="moca"
+          value="摩卡"
+          v-model="isColor"
+        />摩卡</label
+      >
+
     </div>
     <div class="size">
       尺寸:
